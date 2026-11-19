@@ -40,7 +40,8 @@ the legacy `light` and `dark` tokens and the host's neutral foreground.
 Continuum serves the background and treatment from the same verified snapshot.
 The browser starts with the host's neutral theme and reveals the background
 and treatment together after decoding. A failed decode leaves the neutral
-theme in use. Forced colors uses the system theme. Metadata-only updates
+theme in use. A plain artwork record uses Continuum’s legacy legibility
+surfaces. Forced colors uses the system theme. Metadata-only updates
 apply on the next navigation and keep the same immutable image URL.
 
 The page advertises the

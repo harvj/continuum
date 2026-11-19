@@ -11,7 +11,11 @@ if (image) {
         scope.style.setProperty(property, treatment[property] ?? "initial");
       }
     }
-    if (image.dataset.artLegacy) document.body.dataset.foreground = image.dataset.artLegacy;
+    if (image.dataset.artLegacy) {
+      document.body.dataset.foreground = image.dataset.artLegacy;
+    } else if (Object.values(presentation).every(treatment => Object.keys(treatment).length === 0)) {
+      document.body.dataset.artPlain = "";
+    }
     document.body.dataset.artReady = "";
   }, () => image.remove());
 }

@@ -53,11 +53,18 @@ body[data-foreground="light"] { --surface: #24272a; --ink: #f7f6f2; }
   text-shadow: var(--art-text-shadow, none);
 }
 footer { background-color: var(--art-backing, transparent); }
+body[data-art-plain] header a, body[data-art-plain] footer {
+  background-color: var(--surface);
+  border-radius: 4px;
+}
+body[data-art-plain] header a { padding-inline: 4px; }
 body[data-art-ready] header a:focus-visible { box-shadow: 0 0 0 1px var(--surface); }
 @media (forced-colors: active) {
   [data-art-role] { color: CanvasText; text-shadow: none; }
   .background { display: none; }
-  footer { background-color: transparent; }
+  body[data-art-plain] header a, body[data-art-plain] footer, footer {
+    background-color: transparent;
+  }
 }
 @media (max-width: 480px) {
   header { padding: 16px 16px 0; column-gap: 8px; }

@@ -4,7 +4,8 @@ Continuum applies the optional Site Art v1 foreground and glyph shadow by
 role. The header and navigation use the top region, the footer uses the
 bottom region, and main content uses flat treatment. The footer can also
 show an explicit backing. The neutral host theme remains visible until
-the background decodes and stays in use if decoding fails.
+the background decodes and stays in use if decoding fails. Existing local
+legibility surfaces remain in use for plain artwork records.
 
 Metadata-only releases keep the image's immutable URL and update the
 treatment on the next navigation. Continuum preserves the read-only
