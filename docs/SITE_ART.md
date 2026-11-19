@@ -1,40 +1,54 @@
 # Site Art contract
 
-| Page | Logical identifier | Site Art source stem |
-| --- | --- | --- |
-| Network | `continuum.network_background` | `backgrounds/continuum/network` |
-| Library | `continuum.library_background` | `backgrounds/continuum/library` |
-| Intelligence | `continuum.intelligence_background` | `backgrounds/continuum/intelligence` |
+| Page | Background ID | Primary favicon ID | Optional PNG fallback ID |
+| --- | --- | --- | --- |
+| Network | `continuum.network_background` | `continuum.network_favicon` | `continuum.network_favicon_png` |
+| Library | `continuum.library_background` | `continuum.library_favicon` | `continuum.library_favicon_png` |
+| Intelligence | `continuum.intelligence_background` | `continuum.intelligence_favicon` | `continuum.intelligence_favicon_png` |
 
-Source extensions are WebP, PNG, JPG, JPEG or restricted SVG. Register sources
-and provenance in Site Art. A successful push to `harvj/site-art/main` authorizes
-publication. After one-time workflow commissioning, validated pushes publish
-automatically using Site Art's restricted SSH credentials. Add or replace a
-source using its stable ID. Remove its entry to withdraw it from the current
-snapshot while retaining historical assets and provenance.
+Register reviewed sources and provenance in Site Art. Background sources go
+under `backgrounds/continuum/<section>` with a WebP, PNG, JPG, JPEG or
+restricted SVG extension. The primary favicon is
+`favicons/continuum/<section>/favicon.svg` or `favicon.png`. The optional
+fallback uses `favicon.png` and is useful when the primary is SVG. The fallback
+also works on its own. Replacements keep their logical ID. Remove an entry to
+withdraw it while retaining historical bytes and provenance.
 
 The v1 manifest at `https://art.harvj.com/manifest.json` has `schema_version`,
 `commit`, `release`, and an `assets` object keyed by logical ID. Records have
 `url`, `sha256`, `bytes`, `media_type`, and `rights`. The release digest is
 the SHA-256 of compact ASCII-escaped JSON with recursively sorted object keys,
 a final LF, and the `release` member omitted. Public artwork URLs follow
-`https://art.harvj.com/assets/<sha256>.<extension>`.
-
-The publisher validates and installs immutable files before atomically changing
-the manifest. An invalid or interrupted pre-activation publication leaves the
-active snapshot intact. Rollback selects a verified retained release using the
-Site Art workflow. A failed post-activation probe calls for checking the active
-release before retrying because the manifest may already have changed.
+`https://art.harvj.com/assets/<sha256>.<extension>`. Favicons add IDs using
+these same fields. Their media type and extension identify PNG or SVG.
 
 Continuum reads the published directory on the shared host with read-only
-access, verifies the release and artwork hashes, and serves verified background
-bytes from memory on digest-addressed routes. It polls on demand at most once
-every 30 seconds per process. On a fresh page navigation, changes appear within
-30 seconds of activation under steady traffic. Idle processes refresh on their
-next request. Open pages show the background selected when they loaded.
+access, verifies the release and all referenced Continuum assets, and adopts
+one complete snapshot. It polls on demand at most once every 30 seconds per
+process. A new navigation sees the new snapshot after refresh. Open pages
+retain their current artwork. Requests require neither a Site Art process nor
+HTTP access to its public endpoint.
 
-Cold starts with unavailable or invalid data show a neutral surface. Transient
-read or checksum failures keep the last verified in-process snapshot. Successful
-removal drops that background. Requests need neither a Site Art process nor an
-HTTP fetch. The same resolver can be given additional logical IDs when future
-Yod and wiki integrations are built. Continuum has no publication credentials.
+Backgrounds retain their intrinsic proportions and cover the viewport. The
+existing header and footer surfaces preserve text legibility. An absent
+background uses the existing neutral surface. The page advertises the
+host-specific favicon with `rel="icon"` and its MIME type. An SVG advertises
+`sizes="any"`; an optional PNG link precedes it. With no assigned favicon,
+Continuum serves a transparent placeholder. Each host's stable `/favicon.ico`
+redirects with `Cache-Control: no-store`, preferring PNG when available.
+Digest-addressed image responses are immutable for one year. New image bytes
+produce a new URL. Browsers or pinned shortcuts can retain an icon until
+navigation or browser refresh.
+
+The publisher installs verified immutable files before atomically replacing
+the manifest. A failure before activation leaves the prior snapshot active.
+Continuum retains the last verified in-process snapshot on malformed data,
+missing files or checksum errors. A valid manifest with an ID removed drops
+its image. A cold start with no valid snapshot uses the neutral fallbacks.
+The Site Art rollback workflow selects a verified retained release. If a
+post-activation probe fails, check the active release before retrying.
+
+After one-time commissioning, a validated push to `harvj/site-art/main`
+authorizes publication. Publication and rollback need no Continuum restart,
+configuration change or redeployment. Continuum has no publication credentials.
+See [release readiness](RELEASE_v0.1.1.md) for current commissioning status.

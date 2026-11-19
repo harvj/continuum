@@ -4,6 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><%= @section.capitalize %> · Continuum</title>
+    <% if @favicons.empty? %>
+      <link rel="icon" type="image/svg+xml" sizes="any" href="<%= LandingController::NEUTRAL_FAVICON_PATH %>">
+    <% else %>
+      <% @favicons.each do |icon| %>
+        <%= tag.link rel: "icon", href: favicon_path(icon), type: icon.media_type,
+          sizes: ("any" if icon.media_type == "image/svg+xml") %>
+      <% end %>
+    <% end %>
     <link rel="stylesheet" href="/continuum.css">
   </head>
   <body class="<%= @section %>">
@@ -13,7 +21,7 @@
     <header>
       <a class="wordmark" href="https://harvj.com">harvj.</a>
       <nav aria-label="Primary">
-        <% LandingController::SECTIONS.each_key do |section| %>
+        <% LandingController::SECTIONS.each do |section| %>
           <%= link_to section.capitalize, "https://#{section}.harvj.com/", aria: { current: ("page" if @section == section) } %>
         <% end %>
         <a href="https://auth.harvj.com" aria-label="Home">

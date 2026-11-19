@@ -29,7 +29,11 @@
 - Prefer Rails built-in functionality over custom storage infrastructure.
 
 Continuum consumes the published Site Art snapshot with read-only access.
-Keep the stable identifiers and schema in sync with the Site Art contract.
+Keep the stable identifiers and schema in sync with [the Site Art contract](docs/SITE_ART.md).
+Artwork selection and source registration belong to Site Art. Keep host-specific
+icons and backgrounds on the same verified 30-second snapshot, with local
+neutral fallbacks and content-addressed asset URLs. Verify changes with
+synthetic fixtures in both repositories before registering any artwork.
 
 ### Production deployment isolation
 

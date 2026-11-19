@@ -2,7 +2,7 @@ require "digest"
 require "json"
 
 class SiteArt
-  Asset = Data.define(:digest, :media_type, :bytes)
+  Asset = Data.define(:digest, :extension, :media_type, :bytes)
   MEDIA_TYPES = {
     ".webp" => "image/webp", ".png" => "image/png", ".jpg" => "image/jpeg",
     ".jpeg" => "image/jpeg", ".svg" => "image/svg+xml"
@@ -16,17 +16,17 @@ class SiteArt
     @interval = interval
     @clock = clock
     @lock = Mutex.new
-    @verified = {}
+    @verified = {}.freeze
     @next_poll = -Float::INFINITY
   end
 
-  def resolve(identifier)
+  def snapshot
     @lock.synchronize do
       if @clock.call >= @next_poll
         @next_poll = @clock.call + @interval
         refresh
       end
-      @verified[identifier]
+      @verified
     end
   end
 
@@ -36,8 +36,9 @@ class SiteArt
     data = File.binread(@root.join("manifest.json"), MAX_MANIFEST + 1)
     return if data.bytesize > MAX_MANIFEST
 
-    manifest = JSON.parse(data)
-    return unless manifest.is_a?(Hash) && manifest["schema_version"] == 1 &&
+    manifest = JSON.parse(data, allow_duplicate_key: false)
+    return unless manifest.is_a?(Hash) && manifest.keys.sort == %w[assets commit release schema_version] &&
+      manifest["schema_version"].eql?(1) &&
       manifest["commit"].is_a?(String) && manifest["commit"].match?(/\A[0-9a-f]{40}\z/) &&
       manifest["release"].is_a?(String) && manifest["release"].match?(/\A[0-9a-f]{64}\z/) &&
       manifest["assets"].is_a?(Hash)
@@ -48,8 +49,8 @@ class SiteArt
     # Replace the snapshot only after every relevant asset is verified.
     assets = manifest.fetch("assets")
     @verified = @identifiers.filter_map do |id|
-      [id, verify(assets.fetch(id), @verified[id])] if assets.key?(id)
-    end.to_h
+      [id, verify(id, assets.fetch(id), @verified[id])] if assets.key?(id)
+    end.to_h.freeze
   rescue JSON::ParserError, SystemCallError, IOError, ArgumentError
     # A missing or invalid snapshot keeps the last verified assets available.
   end
@@ -60,17 +61,25 @@ class SiteArt
     value.sort.to_h.transform_values { |item| sorted(item) }
   end
 
-  def verify(record, previous)
-    raise ArgumentError unless record.is_a?(Hash)
+  def verify(identifier, record, previous)
+    raise ArgumentError unless record.is_a?(Hash) && record.keys.sort == %w[bytes media_type rights sha256 url] &&
+      record["rights"].is_a?(String) && !record["rights"].empty?
     url, digest, size, type = record.values_at("url", "sha256", "bytes", "media_type")
     match = /\Ahttps:\/\/art\.harvj\.com\/assets\/([0-9a-f]{64})(\.[a-z]+)\z/.match(url) if url.is_a?(String)
     raise ArgumentError unless match && digest == match[1] && type && type == MEDIA_TYPES[match[2]] &&
       size.is_a?(Integer) && size.between?(1, MAX_ASSET)
 
-    return previous if previous&.digest == digest && previous.media_type == type && previous.bytes.bytesize == size
+    extension = match[2]
+    if identifier.end_with?("_favicon_png")
+      raise ArgumentError unless extension == ".png"
+    elsif identifier.end_with?("_favicon")
+      raise ArgumentError unless %w[.svg .png].include?(extension)
+    end
+
+    return previous if previous&.extension == extension && previous.digest == digest && previous.media_type == type && previous.bytes.bytesize == size
 
     bytes = File.binread(@root.join("assets", "#{digest}#{match[2]}"), size + 1)
     raise ArgumentError unless bytes.bytesize == size && Digest::SHA256.hexdigest(bytes) == digest
-    Asset.new(digest.freeze, type.freeze, bytes.freeze)
+    Asset.new(digest.freeze, extension.freeze, type.freeze, bytes.freeze)
   end
 end

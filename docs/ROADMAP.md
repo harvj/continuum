@@ -34,6 +34,14 @@ Acceptance: [assessment](P1.0_ASSESSMENT.md), this roadmap, updated status,
 [P1.1 plan](P1.1_PLAN.md), and [deployment preparation](DEPLOYMENT_PREPARATION.md);
 15 passing tests, repeatable 37-page inventory, 55 checksum-verified images.
 
+## v0.1.1 — Background and Favicon Integration
+
+The local candidate completes the three host-specific [Site Art bindings](SITE_ART.md)
+for backgrounds and SVG/PNG favicons. Site Art owns artwork selection and
+publication. Independent publication and rollback refresh the unchanged Rails
+process. See the [release notes](RELEASE_v0.1.1.md) for verification and the
+remaining production commissioning work.
+
 ## P1.1 — Rails foundation, shared content model, and repeatable import
 
 **Next.** Detailed sequence and acceptance criteria: [P1.1 plan](P1.1_PLAN.md).
