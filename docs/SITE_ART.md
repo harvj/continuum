@@ -30,8 +30,12 @@ retain their current artwork. Requests require neither a Site Art process nor
 HTTP access to its public endpoint.
 
 Backgrounds retain their intrinsic proportions and cover the viewport. The
-existing header and footer surfaces preserve text legibility. An absent
-background uses the existing neutral surface. The page advertises the
+optional `foreground` field selects `light` or `dark` for text and icons over
+the image. Site Art chooses this value for the reviewed crops. The field and
+image belong to the same verified snapshot. A metadata-only publication keeps
+the image URL and applies on navigation after refresh. A record without the
+field uses the host's neutral foreground. An absent background uses the
+existing host-specific neutral surface and foreground. The page advertises the
 host-specific favicon with `rel="icon"` and its MIME type. An SVG advertises
 `sizes="any"`; an optional PNG link precedes it. With no assigned favicon,
 Continuum serves a transparent placeholder. Each host's stable `/favicon.ico`
@@ -48,6 +52,8 @@ its image. A cold start with no valid snapshot uses the neutral fallbacks.
 The Site Art rollback workflow selects a verified retained release. If a
 post-activation probe fails, check the active release before retrying.
 
+The first release with `foreground` requires a compatible Continuum deployment
+and Site Art publisher verifier. Both accept older v1 releases without the field.
 After one-time commissioning, a validated push to `harvj/site-art/main`
 authorizes publication. Publication and rollback need no Continuum restart,
 configuration change or redeployment. Continuum has no publication credentials.

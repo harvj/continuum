@@ -2,7 +2,7 @@ require "digest"
 require "json"
 
 class SiteArt
-  Asset = Data.define(:digest, :extension, :media_type, :bytes)
+  Asset = Data.define(:digest, :extension, :media_type, :bytes, :foreground)
   MEDIA_TYPES = {
     ".webp" => "image/webp", ".png" => "image/png", ".jpg" => "image/jpeg",
     ".jpeg" => "image/jpeg", ".svg" => "image/svg+xml"
@@ -62,8 +62,14 @@ class SiteArt
   end
 
   def verify(identifier, record, previous)
-    raise ArgumentError unless record.is_a?(Hash) && record.keys.sort == %w[bytes media_type rights sha256 url] &&
+    raise ArgumentError unless record.is_a?(Hash) && (record.keys - ["foreground"]).sort == %w[bytes media_type rights sha256 url] &&
       record["rights"].is_a?(String) && !record["rights"].empty?
+
+    foreground = record["foreground"]
+    if record.key?("foreground")
+      raise ArgumentError unless identifier.end_with?("_background") && %w[light dark].include?(foreground)
+    end
+
     url, digest, size, type = record.values_at("url", "sha256", "bytes", "media_type")
     match = /\Ahttps:\/\/art\.harvj\.com\/assets\/([0-9a-f]{64})(\.[a-z]+)\z/.match(url) if url.is_a?(String)
     raise ArgumentError unless match && digest == match[1] && type && type == MEDIA_TYPES[match[2]] &&
@@ -76,10 +82,15 @@ class SiteArt
       raise ArgumentError unless %w[.svg .png].include?(extension)
     end
 
-    return previous if previous&.extension == extension && previous.digest == digest && previous.media_type == type && previous.bytes.bytesize == size
+    if previous&.extension == extension && previous.digest == digest && previous.media_type == type && previous.bytes.bytesize == size
+      return previous if previous.foreground == foreground
 
-    bytes = File.binread(@root.join("assets", "#{digest}#{match[2]}"), size + 1)
+      return previous.with(foreground: foreground.freeze)
+    end
+
+    bytes = File.binread(@root.join("assets", "#{digest}#{extension}"), size + 1)
     raise ArgumentError unless bytes.bytesize == size && Digest::SHA256.hexdigest(bytes) == digest
-    Asset.new(digest.freeze, extension.freeze, type.freeze, bytes.freeze)
+
+    Asset.new(digest.freeze, extension.freeze, type.freeze, bytes.freeze, foreground.freeze)
   end
 end

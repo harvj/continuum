@@ -74,11 +74,48 @@ class LandingTest < ActionDispatch::IntegrationTest
     assert_response :not_found
   end
 
+  test "foreground updates independently of image bytes and rolls back with the snapshot" do
+    host! "intelligence.harvj.com"
+    id = "continuum.intelligence_background"
+    image = svg_record("ivory")
+    digest = image.fetch("sha256")
+    dark = image.merge("foreground" => "dark")
+    assert_manifest(id => dark)
+    get "/"
+    assert_select "body[data-foreground=dark] img.background[src='/background/#{digest}']"
+    saved = @root.join("manifest.json").binread
+
+    assert_manifest(id => image.merge("foreground" => "light"))
+    @time = 29
+    get "/"
+    assert_select "body[data-foreground=dark]"
+    @time = 30
+    get "/"
+    assert_select "body[data-foreground=light] img.background[src='/background/#{digest}']"
+
+    [image.merge("foreground" => "auto"), image.merge("foreground" => nil)].each do |invalid|
+      assert_manifest(id => invalid)
+      @time += 30
+      get "/"
+      assert_select "body[data-foreground=light]"
+    end
+
+    assert_manifest(id => image)
+    @time += 30
+    get "/"
+    assert_select "body:not([data-foreground]) img.background[src='/background/#{digest}']"
+
+    @root.join("manifest.json").binwrite(saved)
+    @time += 30
+    get "/"
+    assert_select "body[data-foreground=dark] img.background[src='/background/#{digest}']"
+  end
+
   test "all hosts pick only their own verified background and icons" do
     records = {}
     sections = LandingController::SECTIONS
-    sections.zip(%w[red green blue]).each do |section, color|
-      records["continuum.#{section}_background"] = svg_record(color, width: 4)
+    sections.zip(%w[ivory navy ivory], %w[dark light dark]).each do |section, color, foreground|
+      records["continuum.#{section}_background"] = svg_record(color, width: 4).merge("foreground" => foreground)
       records["continuum.#{section}_favicon"] = svg_record(color)
     end
     png = png_record
@@ -90,7 +127,8 @@ class LandingTest < ActionDispatch::IntegrationTest
       host! "#{section}.harvj.com"
       get "/"
       assert_response :success
-      assert_select "img.background[src='/background/#{records.fetch("continuum.#{section}_background").fetch("sha256")}']", count: 1
+      background = records.fetch("continuum.#{section}_background")
+      assert_select "body[data-foreground=#{background.fetch("foreground")}] img.background[src='/background/#{background.fetch("sha256")}']", count: 1
       primary = records.fetch("continuum.#{section}_favicon")
       expected = section == "network" ? [png, primary] : [primary]
       assert_select "link[rel=icon]" do |links|

@@ -14,7 +14,7 @@
     <% end %>
     <link rel="stylesheet" href="/continuum.css">
   </head>
-  <body class="<%= @section %>">
+  <body <%= tag.attributes(class: @section, data: { foreground: @background&.foreground }.compact) %>>
     <% if @background %>
       <img class="background" src="/background/<%= @background.digest %>" alt="" aria-hidden="true">
     <% end %>

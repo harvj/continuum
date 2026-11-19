@@ -1,5 +1,17 @@
 # Continuum status
 
+## Background-aware landing pages
+
+Network, Library, and Intelligence render navigation and version text
+directly over the artwork. The shared Site Art contract supplies an optional
+foreground choice alongside the background in the verified snapshot.
+Neutral fallbacks retain their existing host-specific colors.
+
+Locally verified with 10 Rails tests against disposable PostgreSQL and
+Chromium at 1440 × 900 and 390 × 844. The preview used the Intelligence
+landscape and synthetic artwork for Network and Library. The changes are
+local. See the [Site Art contract](SITE_ART.md) for rollout compatibility.
+
 ## v0.1.1 Background and Favicon Integration
 
 Production runs `6e337999fbbce132bf8e77fe4864805f02d916c4`. All three public
