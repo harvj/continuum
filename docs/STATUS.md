@@ -2,18 +2,22 @@
 
 ## v0.1.1 Background and Favicon Integration
 
-The local candidate binds each hostname to the existing background ID and its
-own SVG or PNG favicon in the verified 30-second Site Art snapshot. Production
-remains on v0.1.0. No Continuum artwork is registered in the public manifest.
+Production runs `6e337999fbbce132bf8e77fe4864805f02d916c4`. All three public
+hostnames passed HTTPS, neutral background and favicon, navigation, version
+footer, liveness, and database readiness checks. Neighboring applications,
+Caddy configuration, and the Site Art manifest matched their baselines.
+The [GitHub release](https://github.com/harvj/continuum/releases/tag/v0.1.1)
+was published after verification. No Continuum artwork is registered.
 
 Verified with PostgreSQL (9 Rails tests, 174 assertions), 4 inventory tests,
 35 Site Art tests with Caddy, and 25 Chromium navigations on three hosts at
 1440×900 and 390×844. An unchanged Rails process rendered neutral fallbacks,
 first publication, replacements and rollback from disposable Site Art snapshots.
 
-Automatic Site Art publication is blocked. The latest validation job did not
-start because of GitHub billing or spending limits, and the commissioning
-variable is unset. See [release notes](RELEASE_v0.1.1.md) and the
+Continuum and Site Art CI passed on the pushed revisions. The earlier Site Art
+billing failure did not recur. The production job was skipped because the
+automatic publication switch remains unset. Commissioning and an approved
+off-server backup destination remain separate work. See the
 [Site Art contract](SITE_ART.md).
 
 ## v0.1.0 application foundation
