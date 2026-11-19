@@ -2,6 +2,17 @@
 
 ## v0.1.2 Site Art presentation
 
+Production runs `7c2d9cb797d0340b590ffa8439df607126bd18df`.
+Network, Library, and Intelligence passed public HTTPS, version, liveness,
+and database readiness checks. Neighbor route and service health matched
+the refreshed baseline. Caddy and Site Art configuration were unchanged.
+GitHub CI passed 12 Rails tests with PostgreSQL (282 assertions) and four
+inventory tests. See the [v0.1.2 release notes](RELEASE_v0.1.2.md).
+
+The live Intelligence artwork uses the local legibility surfaces because the
+published record contains only core image data. Verified the live image and
+fallback surfaces in Brave at 1440 × 900 and 390 × 844.
+
 - The Rails reader accepts Site Art presentation v1 and resolves the header,
   main, and footer independently. The browser installs validated treatment
   after image decode and uses the neutral host theme on failure.
@@ -23,7 +34,7 @@
 
 ## v0.1.1 Background and Favicon Integration
 
-Production runs `6e337999fbbce132bf8e77fe4864805f02d916c4`. All three public
+The v0.1.1 deployment used `6e337999fbbce132bf8e77fe4864805f02d916c4`. All three public
 hostnames passed HTTPS, neutral background and favicon, navigation, version
 footer, liveness, and database readiness checks. Neighboring applications,
 Caddy configuration, and the Site Art manifest matched their baselines.
