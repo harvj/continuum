@@ -1,11 +1,13 @@
+require "bigdecimal"
 require "digest"
 require "json"
 
 class SiteArt
-  Asset = Data.define(:digest, :extension, :media_type, :bytes, :foreground)
+  Asset = Data.define(:digest, :extension, :media_type, :bytes, :foreground, :presentation)
   MEDIA_TYPES = {
     ".webp" => "image/webp", ".png" => "image/png", ".jpg" => "image/jpeg",
-    ".jpeg" => "image/jpeg", ".svg" => "image/svg+xml"
+    ".jpeg" => "image/jpeg", ".svg" => "image/svg+xml", ".gif" => "image/gif",
+    ".ico" => "image/vnd.microsoft.icon"
   }.freeze
   MAX_ASSET = 25 * 1024 * 1024
   MAX_MANIFEST = 1024 * 1024
@@ -44,53 +46,66 @@ class SiteArt
       manifest["assets"].is_a?(Hash)
 
     payload = manifest.except("release")
-    return unless Digest::SHA256.hexdigest(JSON.generate(sorted(payload), ascii_only: true) + "\n") == manifest["release"]
+    return unless Digest::SHA256.hexdigest(canonical_json(payload) + "\n") == manifest["release"]
 
     # Replace the snapshot only after every relevant asset is verified.
     assets = manifest.fetch("assets")
     @verified = @identifiers.filter_map do |id|
-      [id, verify(id, assets.fetch(id), @verified[id])] if assets.key?(id)
+      asset = verify(id, assets[id], @verified[id])
+      [id, asset] if asset
     end.to_h.freeze
   rescue JSON::ParserError, SystemCallError, IOError, ArgumentError
     # A missing or invalid snapshot keeps the last verified assets available.
   end
 
-  def sorted(value)
-    return value unless value.is_a?(Hash)
+  def canonical_json(value)
+    case value
+    when Hash
+      "{" + value.sort.map { |key, item| "#{canonical_json(key)}:#{canonical_json(item)}" }.join(",") + "}"
+    when Array
+      "[" + value.map { |item| canonical_json(item) }.join(",") + "]"
+    when Float
+      # Match the publisher's Python JSON spelling for numbers in optional fields.
+      raise ArgumentError unless value.finite?
 
-    value.sort.to_h.transform_values { |item| sorted(item) }
+      mantissa, exponent = value.to_s.split("e")
+      return mantissa unless exponent
+      return BigDecimal(value.to_s).to_s("F") if exponent.to_i.between?(-4, 15)
+
+      "#{mantissa.delete_suffix('.0')}e#{exponent}"
+    else
+      JSON.generate(value, ascii_only: true).gsub("\u007f") { '\u007f' }
+    end
   end
 
   def verify(identifier, record, previous)
-    raise ArgumentError unless record.is_a?(Hash) && (record.keys - ["foreground"]).sort == %w[bytes media_type rights sha256 url] &&
+    return unless record.is_a?(Hash) &&
       record["rights"].is_a?(String) && !record["rights"].empty?
 
     foreground = record["foreground"]
-    if record.key?("foreground")
-      raise ArgumentError unless identifier.end_with?("_background") && %w[light dark].include?(foreground)
-    end
+    foreground = nil unless %w[light dark].include?(foreground)
 
     url, digest, size, type = record.values_at("url", "sha256", "bytes", "media_type")
     match = /\Ahttps:\/\/art\.harvj\.com\/assets\/([0-9a-f]{64})(\.[a-z]+)\z/.match(url) if url.is_a?(String)
-    raise ArgumentError unless match && digest == match[1] && type && type == MEDIA_TYPES[match[2]] &&
+    return unless match && digest == match[1] && type && type == MEDIA_TYPES[match[2]] &&
       size.is_a?(Integer) && size.between?(1, MAX_ASSET)
 
     extension = match[2]
     if identifier.end_with?("_favicon_png")
-      raise ArgumentError unless extension == ".png"
+      return unless extension == ".png"
     elsif identifier.end_with?("_favicon")
-      raise ArgumentError unless %w[.svg .png].include?(extension)
+      return unless %w[.svg .png].include?(extension)
     end
 
-    if previous&.extension == extension && previous.digest == digest && previous.media_type == type && previous.bytes.bytesize == size
-      return previous if previous.foreground == foreground
+    presentation = SiteArtPresentation.resolve(record["presentation"])
 
-      return previous.with(foreground: foreground.freeze)
+    if previous&.extension == extension && previous.digest == digest && previous.media_type == type && previous.bytes.bytesize == size
+      return previous.with(foreground: foreground.freeze, presentation: presentation)
     end
 
     bytes = File.binread(@root.join("assets", "#{digest}#{extension}"), size + 1)
     raise ArgumentError unless bytes.bytesize == size && Digest::SHA256.hexdigest(bytes) == digest
 
-    Asset.new(digest.freeze, extension.freeze, type.freeze, bytes.freeze, foreground.freeze)
+    Asset.new(digest.freeze, extension.freeze, type.freeze, bytes.freeze, foreground.freeze, presentation)
   end
 end

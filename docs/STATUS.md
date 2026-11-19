@@ -1,16 +1,25 @@
 # Continuum status
 
-## Background-aware landing pages
+## v0.1.2 Site Art presentation
 
-Network, Library, and Intelligence render navigation and version text
-directly over the artwork. The shared Site Art contract supplies an optional
-foreground choice alongside the background in the verified snapshot.
-Neutral fallbacks retain their existing host-specific colors.
-
-Locally verified with 10 Rails tests against disposable PostgreSQL and
-Chromium at 1440 × 900 and 390 × 844. The preview used the Intelligence
-landscape and synthetic artwork for Network and Library. The changes are
-local. See the [Site Art contract](SITE_ART.md) for rollout compatibility.
+- The Rails reader accepts Site Art presentation v1 and resolves the header,
+  main, and footer independently. The browser installs validated treatment
+  after image decode and uses the neutral host theme on failure.
+- Verified regional inheritance, optional-field handling, same-image metadata
+  updates, rollback, and fallbacks with Site Art's synthetic fixtures. Checked
+  rendered styles, keyboard focus, and forced colors in Brave at 1440 × 900
+  and 390 × 844. The reader also accepted an offline Site Art build with the
+  current Intelligence artwork and metadata.
+- Sampled contrast beneath solid glyph pixels in the current Intelligence
+  crop. The footer reaches a low of about 2.3:1 at both tested sizes, below the
+  4.5:1 target for normal text. The source artwork and treatment remain under
+  Site Art ownership.
+- Rails and offline Python and JavaScript suites passed. The PostgreSQL
+  readiness test and the two Caddy HTTP tests require local services and were
+  skipped in local testing.
+- Added an [offline Intelligence landing preview](design/intelligence-preview.html)
+  that loads the current artwork from the sibling Site Art checkout. Verified
+  direct file loading and the footer treatment in Brave.
 
 ## v0.1.1 Background and Favicon Integration
 

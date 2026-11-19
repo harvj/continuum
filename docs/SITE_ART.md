@@ -30,12 +30,20 @@ retain their current artwork. Requests require neither a Site Art process nor
 HTTP access to its public endpoint.
 
 Backgrounds retain their intrinsic proportions and cover the viewport. The
-optional `foreground` field selects `light` or `dark` for text and icons over
-the image. Site Art chooses this value for the reviewed crops. The field and
-image belong to the same verified snapshot. A metadata-only publication keeps
-the image URL and applies on navigation after refresh. A record without the
-field uses the host's neutral foreground. An absent background uses the
-existing host-specific neutral surface and foreground. The page advertises the
+[Site Art consumer presentation specification v1](https://github.com/harvj/site-art/blob/main/ops/presentation-spec-v1.md)
+defines treatment for ordinary content, the header and navigation, and the
+footer. Each role resolves its foreground, glyph shadow, and backing
+independently, with regional values overriding flat values. The footer is
+the designated backing surface. Structured foreground takes precedence over
+the legacy `light` and `dark` tokens and the host's neutral foreground.
+
+Continuum serves the background and treatment from the same verified snapshot.
+The browser starts with the host's neutral theme and reveals the background
+and treatment together after decoding. A failed decode leaves the neutral
+theme in use. Forced colors uses the system theme. Metadata-only updates
+apply on the next navigation and keep the same immutable image URL.
+
+The page advertises the
 host-specific favicon with `rel="icon"` and its MIME type. An SVG advertises
 `sizes="any"`; an optional PNG link precedes it. With no assigned favicon,
 Continuum serves a transparent placeholder. Each host's stable `/favicon.ico`
@@ -46,14 +54,14 @@ navigation or browser refresh.
 
 The publisher installs verified immutable files before atomically replacing
 the manifest. A failure before activation leaves the prior snapshot active.
-Continuum retains the last verified in-process snapshot on malformed data,
-missing files or checksum errors. A valid manifest with an ID removed drops
-its image. A cold start with no valid snapshot uses the neutral fallbacks.
+Continuum retains the last verified in-process snapshot on an invalid
+envelope, a release digest mismatch, or missing or corrupt referenced bytes.
+An absent ID or invalid core record uses the local fallback for that ID.
+Unknown optional fields are ignored, and invalid optional values leave valid
+fields and images usable. A cold start with no valid snapshot uses the neutral fallbacks.
 The Site Art rollback workflow selects a verified retained release. If a
 post-activation probe fails, check the active release before retrying.
 
-The first release with `foreground` requires a compatible Continuum deployment
-and Site Art publisher verifier. Both accept older v1 releases without the field.
 After one-time commissioning, a validated push to `harvj/site-art/main`
 authorizes publication. Publication and rollback need no Continuum restart,
 configuration change or redeployment. Continuum has no publication credentials.

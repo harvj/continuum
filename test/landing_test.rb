@@ -82,33 +82,113 @@ class LandingTest < ActionDispatch::IntegrationTest
     dark = image.merge("foreground" => "dark")
     assert_manifest(id => dark)
     get "/"
-    assert_select "body[data-foreground=dark] img.background[src='/background/#{digest}']"
+    assert_select "img.background[data-art-legacy=dark][src='/background/#{digest}']"
     saved = @root.join("manifest.json").binread
 
     assert_manifest(id => image.merge("foreground" => "light"))
     @time = 29
     get "/"
-    assert_select "body[data-foreground=dark]"
+    assert_select "img.background[data-art-legacy=dark]"
     @time = 30
     get "/"
-    assert_select "body[data-foreground=light] img.background[src='/background/#{digest}']"
+    assert_select "img.background[data-art-legacy=light][src='/background/#{digest}']"
 
     [image.merge("foreground" => "auto"), image.merge("foreground" => nil)].each do |invalid|
       assert_manifest(id => invalid)
       @time += 30
       get "/"
-      assert_select "body[data-foreground=light]"
+      assert_select "img.background:not([data-art-legacy])"
     end
 
     assert_manifest(id => image)
     @time += 30
     get "/"
-    assert_select "body:not([data-foreground]) img.background[src='/background/#{digest}']"
+    assert_select "img.background:not([data-art-legacy])[src='/background/#{digest}']"
 
     @root.join("manifest.json").binwrite(saved)
     @time += 30
     get "/"
-    assert_select "body[data-foreground=dark] img.background[src='/background/#{digest}']"
+    assert_select "img.background[data-art-legacy=dark][src='/background/#{digest}']"
+  end
+
+  test "presentation fixtures resolve by role and stay paired with verified image bytes" do
+    fixtures = JSON.parse(File.read(File.join(__dir__, "fixtures/site_art_presentation.json")))
+    id = "continuum.network_background"
+    image = svg_record("ivory")
+    digest = image.fetch("sha256")
+    alternate = svg_record("navy")
+    first_manifest = nil
+    first_bytes = nil
+    fixtures.fetch("assets").each do |name, fixture|
+      fields = fixture.fetch("fields")
+      record = case name
+      when "other_theme" then alternate
+      when "invalid_core" then image.merge("url" => image.fetch("url") + "?bad")
+      else image.merge(fields)
+      end
+      assert_manifest(id => record, "future.asset" => { "nested" => [{ "z" => 0, "a" => 1 }] })
+      first_manifest ||= @root.join("manifest.json").binread
+      @time += 30
+      get "/"
+      if fixture["expected"].nil?
+        assert_select "img.background", count: 0
+        next
+      end
+
+      if %w[flat regional zero unknown invalid_optional legacy plain].include?(name)
+        bytes = Rails.application.config.x.site_art.snapshot.fetch(id).bytes
+        first_bytes ||= bytes
+        assert_same first_bytes, bytes
+      end
+
+      assert_select "header[data-art-role=top]"
+      assert_select "main[data-art-role=default]"
+      assert_select "footer[data-art-role=bottom]"
+      assert_select "script[src='/site-art.js'][defer]"
+      assert_includes response.headers.fetch("Content-Security-Policy"), "script-src 'self'"
+      assert_select "img.background[src='/background/#{record.fetch("sha256")}']", count: 1 do |images|
+        node = images.first
+        treatment = JSON.parse(node["data-art-presentation"])
+        fixture.fetch("expected").each do |role, expected|
+          values = fixtures.fetch("expected_treatments").fetch(expected).dup
+          if !fields["foreground"].nil? && values["--art-foreground"] == fixtures.fetch("legacy_palette")[fields["foreground"]]
+            values.delete("--art-foreground")
+            assert_equal fields["foreground"], node["data-art-legacy"]
+          end
+          assert_equal values, treatment.fetch(role), "#{name} / #{role}"
+        end
+      end
+    end
+
+    @root.join("manifest.json").binwrite(first_manifest)
+    @time += 30
+    get "/"
+    assert_select "img.background[src='/background/#{digest}'][data-art-legacy=dark]" do |images|
+      assert_equal "#F5EFE3", JSON.parse(images.first["data-art-presentation"]).dig("top", "--art-foreground")
+    end
+  end
+
+  test "canonical publisher JSON accepts integral optional floats and ignores fractional values" do
+    image = svg_record("ivory")
+    canonical = (<<~JSON).lines.map(&:strip).join
+      {"assets":{"continuum.network_background":{
+        "bytes":#{image.fetch("bytes")},"media_type":"image/svg+xml",
+        "presentation":{
+          "regions":{"top":{"text_shadow":{
+            "blur_px":1e-05,"color":"#112233","opacity_percent":20,"x_px":0,"y_px":1
+          }}},
+          "text_shadow":{"blur_px":2.0,"color":"#010203","opacity_percent":40.0,"x_px":-4.0,"y_px":0.0}
+        },
+        "rights":"\\u007f\\u05d0","sha256":"#{image.fetch("sha256")}","url":"#{image.fetch("url")}"
+      }},"commit":"#{"a" * 40}","schema_version":1}
+    JSON
+    release = Digest::SHA256.hexdigest(canonical + "\n")
+    @root.join("manifest.json").binwrite(canonical.delete_suffix("}") + %Q(,"release":"#{release}"}))
+    get "/"
+    assert_select "img.background" do |images|
+      values = JSON.parse(images.first["data-art-presentation"])
+      assert_equal "-4px 0px 2px rgb(1 2 3 / 40%)", values.dig("top", "--art-text-shadow")
+    end
   end
 
   test "all hosts pick only their own verified background and icons" do
@@ -128,7 +208,7 @@ class LandingTest < ActionDispatch::IntegrationTest
       get "/"
       assert_response :success
       background = records.fetch("continuum.#{section}_background")
-      assert_select "body[data-foreground=#{background.fetch("foreground")}] img.background[src='/background/#{background.fetch("sha256")}']", count: 1
+      assert_select "img.background[data-art-legacy=#{background.fetch("foreground")}][src='/background/#{background.fetch("sha256")}']", count: 1
       primary = records.fetch("continuum.#{section}_favicon")
       expected = section == "network" ? [png, primary] : [primary]
       assert_select "link[rel=icon]" do |links|
@@ -182,19 +262,23 @@ class LandingTest < ActionDispatch::IntegrationTest
 
     wrong_url = first.merge("url" => first["url"].sub("art.harvj.com", "invalid.example"))
     wrong_type = first.merge("media_type" => "image/png")
-    [wrong_url, wrong_type, first.except("rights"), first.merge("bytes" => first["bytes"] + 1)].each do |record|
+    assert_manifest(id => first.merge("bytes" => first["bytes"] + 1))
+    @time += 30
+    assert_icon icon_url(second)
+
+    [wrong_url, wrong_type, first.except("rights")].each do |record|
       assert_manifest(id => record)
       @time += 30
-      assert_icon icon_url(second)
+      assert_icon "/favicon/neutral.svg"
     end
     assert_manifest(id => first)
     @root.join("manifest.json").binwrite(@root.join("manifest.json").binread.sub('"schema_version":1', '"schema_version":2,"schema_version":1'))
     @time += 30
-    assert_icon icon_url(second)
+    assert_icon "/favicon/neutral.svg"
 
     @root.join("manifest.json").delete
     @time += 30
-    assert_icon icon_url(second)
+    assert_icon "/favicon/neutral.svg"
     @root.join("manifest.json").binwrite(saved)
     @time += 30
     assert_icon icon_url(first)
@@ -269,8 +353,15 @@ class LandingTest < ActionDispatch::IntegrationTest
   end
 
   def assert_manifest(assets)
-    payload = { "assets" => assets.sort.to_h.transform_values { |record| record.sort.to_h }, "commit" => "a" * 40, "schema_version" => 1 }
-    release = Digest::SHA256.hexdigest(JSON.generate(payload) + "\n")
+    payload = { "assets" => assets, "commit" => "a" * 40, "schema_version" => 1 }
+    canonical = ->(value) do
+      case value
+      when Hash then value.sort.to_h.transform_values(&canonical)
+      when Array then value.map(&canonical)
+      else value
+      end
+    end
+    release = Digest::SHA256.hexdigest(JSON.generate(canonical.call(payload), ascii_only: true) + "\n")
     @root.join("manifest.json").binwrite(JSON.generate(payload.merge("release" => release)))
   end
 end

@@ -19,6 +19,7 @@ module Continuum
     config.content_security_policy do |policy|
       policy.default_src :none
       policy.style_src :self
+      policy.script_src :self
       policy.font_src :self
       policy.img_src :self
       policy.base_uri :none
