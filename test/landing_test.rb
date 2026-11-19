@@ -33,7 +33,7 @@ class LandingTest < ActionDispatch::IntegrationTest
       assert_select "nav a[aria-current=page]", count: 1, text: section.capitalize
       assert_select "main", text: ""
       assert_select "main *", count: 0
-      assert_select "footer", text: "© 2026 Jim Harvey"
+      assert_select "footer", text: "© 2026 Jim Harvey · Continuum v#{ContinuumVersion.read}"
     end
     get "/up"
     assert_response :success

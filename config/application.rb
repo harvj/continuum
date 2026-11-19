@@ -1,4 +1,5 @@
 require_relative "boot"
+require_relative "../lib/continuum_version"
 require "rails"
 require "active_record/railtie"
 require "action_controller/railtie"
@@ -9,6 +10,7 @@ require "rails/test_unit/railtie"
 module Continuum
   class Application < Rails::Application
     config.load_defaults 8.1
+    config.x.version = ContinuumVersion.read.freeze
     config.hosts = %w[network.harvj.com library.harvj.com intelligence.harvj.com]
     config.active_storage.service = :local
     config.active_storage.draw_routes = false

@@ -26,7 +26,8 @@ deployment scope.
 2. Install Ruby 3.4.12 at `/opt/continuum/ruby` and resolve the locked bundle with
    `BUNDLE_DEPLOYMENT=true BUNDLE_WITHOUT=development:test`. Install each
    verified revision under `/var/www/continuum/releases/<commit>` and use an
-   atomically switched `/var/www/continuum/current` symlink. Keep prior releases.
+   atomically switched `/var/www/continuum/current` symlink. Verify the
+   archived `VERSION` against the candidate release and retain prior releases.
 3. Create `/var/www/continuum/shared/storage` owned by the service at mode 0700.
    Store `DATABASE_URL` (include a short PostgreSQL `connect_timeout`) and a
    generated `SECRET_KEY_BASE` in root-owned mode 0600
@@ -45,7 +46,9 @@ deployment scope.
 5. Verify A/AAAA records for all three hosts and propose only missing or
    incorrect records after verifying the intended Hetzner addresses. Caddy
    supplies HTTPS. Probe root, `/up`, and `/ready` over verified TLS on each
-   host. Confirm links and the neutral or currently authorized background.
+   host. Confirm each footer matches the deployed `VERSION`, and verify links
+   and the neutral or currently authorized background. Publish the GitHub
+   release only after these production checks pass. See [versioning](VERSIONING.md).
 
 Back up the database and persistent storage together off-server, encrypt
 backups, and test restoration into an isolated service before imports. Restore

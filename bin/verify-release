@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+require "open3"
+require_relative "../lib/continuum_version"
+
+def git(*arguments)
+  output, status = Open3.capture2e("git", "--no-replace-objects", *arguments)
+  abort "Git could not verify the release ref or VERSION blob" unless status.success?
+  output
+end
+
+tag, expected = ARGV
+abort "Usage: bin/verify-release vMAJOR.MINOR.PATCH [expected SHA]" unless ARGV.length.between?(1, 2)
+
+begin
+  version = ContinuumVersion.parse(tag.delete_prefix("v"))
+  abort "Expected stable tag v#{version}" unless tag == "v#{version}"
+  commit = git("rev-parse", "--verify", "refs/tags/#{tag}^{commit}").chomp
+  if expected
+    abort "Expected a full Git object SHA" unless /\A[0-9a-f]{40}\z/.match?(expected)
+    abort "#{tag} does not identify the expected revision" unless commit == git("rev-parse", "--verify", "#{expected}^{commit}").chomp
+  end
+  actual = ContinuumVersion.parse(git("cat-file", "blob", "#{commit}:VERSION"))
+  abort "#{tag} disagrees with VERSION (#{actual}) at #{commit}" unless actual == version
+rescue ArgumentError => error
+  abort error.message
+end
+
+puts "Verified #{tag} at #{commit}"

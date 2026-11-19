@@ -2,6 +2,9 @@
 
 ## v0.1.0 application foundation
 
+The v0.1.0 candidate now reads the committed version at boot and verifies
+release tags against the exact revision. See [versioning](VERSIONING.md).
+
 The repository and checkout are named Continuum. Rails now serves the three
 host-specific landing pages. See the [release notes](RELEASE_v0.1.0.md),
 [Site Art contract](SITE_ART.md), and [deployment plan](CONTINUUM_DEPLOYMENT.md).

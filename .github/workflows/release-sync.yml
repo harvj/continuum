@@ -1,0 +1,42 @@
+name: Verify release version synchronization
+
+on:
+  push:
+    tags: ["v*"]
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Stable release tag to verify
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    if: github.repository == 'harvj/continuum'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: ruby/setup-ruby@v1
+      - name: Verify the exact tag and committed application version
+        env:
+          TAG: ${{ github.event.release.tag_name || inputs.tag || github.ref_name }}
+          EVENT_SHA: ${{ github.sha }}
+          START_EVENT: ${{ github.event_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$START_EVENT" == workflow_dispatch ]]; then
+            bin/verify-release "$TAG" | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            bin/verify-release "$TAG" "$EVENT_SHA" | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
