@@ -14,8 +14,16 @@ The next implementation milestone is the P1.1 content model and importer.
 Verified locally: Rails integration tests with PostgreSQL (3 tests, 64
 assertions), the inventory and image suites (15 tests), Site Art (33 tests),
 Brakeman, the Ruby advisory database, and Chromium at 1440×900 and 390×844.
-Production deployment and automatic Site Art publication commissioning remain
-pending separate authorization.
+Production v0.1.0 is deployed at
+`2be1a7c8d7652fc989753885a05e77b1047be2d5`.
+Network, Library, and Intelligence returned the exact v0.1.0 footer over
+HTTPS and passed liveness and database readiness. The Rails suite passed with
+PostgreSQL (7 tests, 88 assertions), and GitHub CI and exact tag verification
+passed. The first GitHub release was published after verification.
+Neighboring applications matched their baselines. The dedicated database
+and persistent media directory were empty at bootstrap. Commissioning
+automatic Site Art publication and confirming an off-server backup destination
+remain separate work before content imports.
 
 Updated: 2026-10-29
 

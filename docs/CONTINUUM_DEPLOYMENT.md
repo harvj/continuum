@@ -24,7 +24,9 @@ deployment scope.
    endpoint with an explicit authentication rule. Keep existing application
    roles and databases out of the transaction.
 2. Install Ruby 3.4.12 at `/opt/continuum/ruby` and resolve the locked bundle with
-   `BUNDLE_DEPLOYMENT=true BUNDLE_WITHOUT=development:test`. Install each
+   `BUNDLE_DEPLOYMENT=true BUNDLE_WITHOUT=development:test`. Persist those
+   settings in the release-local Bundler configuration so systemd uses the
+   same release-local gems at startup. Install each
    verified revision under `/var/www/continuum/releases/<commit>` and use an
    atomically switched `/var/www/continuum/current` symlink. Verify the
    archived `VERSION` against the candidate release and retain prior releases.
