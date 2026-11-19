@@ -1,8 +1,22 @@
-# Project status
+# Continuum status
+
+## v0.1.0 application foundation
+
+The repository and checkout are named Continuum. Rails now serves the three
+host-specific landing pages. See the [release notes](RELEASE_v0.1.0.md),
+[Site Art contract](SITE_ART.md), and [deployment plan](CONTINUUM_DEPLOYMENT.md).
+The migration baseline below records the historical tool and export status.
+The next implementation milestone is the P1.1 content model and importer.
+
+Verified locally: Rails integration tests with PostgreSQL (3 tests, 64
+assertions), the inventory and image suites (15 tests), Site Art (33 tests),
+Brakeman, the Ruby advisory database, and Chromium at 1440×900 and 390×844.
+Production deployment and automatic Site Art publication commissioning remain
+pending separate authorization.
 
 Updated: 2026-10-29
 
-## Current milestone
+## Historical inventory milestone
 
 Completed: repository documentation and first local Squarespace content inventory.
 
@@ -25,7 +39,7 @@ Completed: repository documentation and first local Squarespace content inventor
 - Image URLs embedded only in CSS or JavaScript are not extracted; HTML is retained.
 - Readable text normalizes whitespace; the export remains the authoritative original.
 - Multiple exports are inventoried independently; overlapping records are not merged.
-- No application importer, search, database, or symbolic relationship model exists yet.
+- Application import, search and symbolic relationship models remain future work.
 - Medium and Substack exports have not been inventoried.
 
 ## Next possible tasks

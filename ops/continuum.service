@@ -1,0 +1,25 @@
+[Unit]
+Description=Continuum Rails application
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+User=continuum
+Group=continuum
+WorkingDirectory=/var/www/continuum/current
+Environment=RAILS_ENV=production
+Environment=PATH=/opt/continuum/ruby/bin:/usr/local/bin:/usr/bin:/bin
+Environment=CONTINUUM_STORAGE_ROOT=/var/www/continuum/shared/storage
+Environment=SITE_ART_ROOT=/var/www/site-art/public
+EnvironmentFile=/etc/continuum/production.env
+ExecStart=/opt/continuum/ruby/bin/bundle exec puma -b tcp://127.0.0.1:4310
+Restart=on-failure
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/continuum/shared/storage
+
+[Install]
+WantedBy=multi-user.target

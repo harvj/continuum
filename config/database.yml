@@ -1,0 +1,16 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+
+development:
+  <<: *default
+  database: continuum_development
+
+test:
+  <<: *default
+  database: continuum_test
+
+production:
+  <<: *default
+  url: <%= ENV.fetch("DATABASE_URL") if Rails.env.production? %>

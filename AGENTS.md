@@ -1,3 +1,4 @@
+# Continuum
 # Working agreements
 
 - Prefer simple, maintainable implementations with minimal dependencies.
@@ -26,3 +27,6 @@
 - Include application media in off-server backups and document restoration procedures.
 - Do not delete original media during imports or migrations.
 - Prefer Rails built-in functionality over custom storage infrastructure.
+
+Continuum consumes the published Site Art snapshot with read-only access.
+Keep the stable identifiers and schema in sync with the Site Art contract.

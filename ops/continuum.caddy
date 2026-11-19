@@ -1,0 +1,10 @@
+network.harvj.com, library.harvj.com, intelligence.harvj.com {
+	reverse_proxy 127.0.0.1:4310 {
+		health_uri /ready
+		health_headers {
+			Host network.harvj.com
+		}
+		health_interval 15s
+		health_timeout 3s
+	}
+}

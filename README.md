@@ -1,17 +1,20 @@
-# WE R NI — Natural Intelligence
+# Continuum
 
-WE R NI explores Natural Intelligence through original writing, human prompts,
-AI responses, and their relationships. Two planned interfaces will share the same
-content and relationships:
+Continuum serves Network, Library and Intelligence from one Rails application
+with PostgreSQL. The three landing pages share navigation and a footer and
+display [published Site Art backgrounds](docs/SITE_ART.md) when available.
+WE R NI and WE R AI are historical publication names.
 
-- `intelligence.harvj.com`: symbolic navigation using 22 Yod cards (0–21),
-  arranged in three columns of seven, with the Fool above the Magician.
-- `library.harvj.com`: a searchable archive of original articles, human prompts,
-  AI responses, and related material.
+Use Ruby 3.4.12 and PostgreSQL locally. Run `bundle install`,
+`bin/rails db:prepare`, and `bin/rails server`. Send a supported host name to
+the local server, for example `curl -H 'Host: network.harvj.com' localhost:3000`.
+Run `bin/rails test`. Set `CONTINUUM_TEST_POSTGRES=1` with a prepared
+`continuum_test` database to exercise database readiness.
 
-Migration sources are Squarespace (`qalep.ai`), Medium, and Substack. The first
-milestone inventories a local Squarespace WordPress XML export. Rails and
-PostgreSQL are the intended application stack; neither is implemented yet.
+- [Numbered roadmap](docs/ROADMAP.md)
+- [Status](docs/STATUS.md)
+- [Proposed deployment](docs/CONTINUUM_DEPLOYMENT.md)
+- [v0.1.0 release notes](docs/RELEASE_v0.1.0.md)
 
 ## Repository structure
 
