@@ -4,6 +4,20 @@ Requires separate production authorization. Measure current state before making
 changes. The following paths, service identity, and loopback port are proposed
 and must be checked for conflicts on the host.
 
+Record the current process identities, failed units, and representative HTTP
+responses of neighboring applications before making changes. Pre-existing
+application failures are baseline observations. Continue unless a condition
+threatens shared infrastructure, data integrity, isolation, or the safety of
+the proposed change. Compare the same signals after activation and stop to
+assess any new failure plausibly caused by the release. Do not diagnose,
+repair, restart, or change the configuration or data of a neighboring service
+during a Continuum deployment.
+
+The existing CE journal reporting failure (`EvidenceLimitError`) belongs to
+the CE project. Record it as a baseline observation during v0.1.0 activation.
+Keep CE trading controls, budgets, databases, and authorizations outside
+deployment scope.
+
 1. Create the dedicated `continuum` system user/group, a PostgreSQL LOGIN role
    `continuum` with no superuser/role/database creation privileges, and a new
    database `continuum_production` owned by that role. Use a private PostgreSQL

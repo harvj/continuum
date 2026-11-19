@@ -30,3 +30,15 @@
 
 Continuum consumes the published Site Art snapshot with read-only access.
 Keep the stable identifiers and schema in sync with the Site Art contract.
+
+### Production deployment isolation
+
+- Baseline neighboring services with read-only checks. Record pre-existing
+  failures and proceed with an independent Continuum release unless the
+  condition threatens shared infrastructure, data integrity, isolation, or
+  deployment safety.
+- Compare the same signals after activation. Stop and assess new failures
+  plausibly introduced by the release. Never repair or restart neighboring
+  services as part of a Continuum deployment.
+- Keep Continuum Engine trading controls, budgets, databases, and
+  authorizations outside Continuum deployment scope.
