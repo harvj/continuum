@@ -1,5 +1,12 @@
 # Continuum status
 
+## Application Shell footer
+
+The landing footer on Network, Library, and Intelligence links the credit
+and uses the current year. It continues to display the version resolved at
+application startup. The Rails integration test covers year rollover on
+all three hosts. This change is pending review and deployment.
+
 ## v0.1.2 Site Art presentation
 
 Production runs `7c2d9cb797d0340b590ffa8439df607126bd18df`.
