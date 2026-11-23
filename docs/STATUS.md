@@ -1,5 +1,14 @@
 # Continuum status
 
+## v0.2.0 owner-assurance resolution
+
+Auth recorded a candidate-specific owner-assurance policy without changing
+the accepted code SHA. The protected signed Auth review still lacks
+mandatory observations. Infrastructure has an exact forward v2.1 manifest
+in review and needs the authorized publisher signature. Continuum stays
+on v0.1.2. See the
+[assurance and release gate record](qualification/CONTINUUM_V0.2.0_ASSURANCE.md).
+
 ## v0.2.0 selected v2 qualification
 
 Reconciled the exact local release branch with remote operations guidance.
