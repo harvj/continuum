@@ -1,5 +1,13 @@
 # Continuum status
 
+## Continuum confidential-client onboarding
+
+Signed v2.1 and Auth grouped-requester support are live. The owner chose
+owner-only membership and password-sufficient assurance for all three
+Continuum hosts. Current Auth policy still challenges enrolled accounts
+and the live login routes remain inactive. See the
+[onboarding record](qualification/CONTINUUM_AUTH_ONBOARDING.md).
+
 ## v0.2.0 owner-assurance resolution
 
 Auth recorded a candidate-specific owner-assurance policy without changing
