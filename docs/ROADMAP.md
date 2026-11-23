@@ -111,10 +111,10 @@ Network features, before launching any protected workflows.
    and retain the independent focus check. Resolve the production v1.3.0
    applicability and contrast gates before any release. See the
    [v0.2.0 preflight record](qualification/CONTINUUM_V0.2.0_PREFLIGHT.md).
-2. Add durable candidate number allocation, exact archive and launch binding,
-   authenticated acceptance/publication receipts and same-process footer
-   refresh. Rehearse failure retention and rollback before replacing the
-   existing production version path.
+2. Adopt the [locally qualified SH-07 release identity](qualification/CONTINUUM_SH07_RELEASE_IDENTITY.md)
+   after reviewing production signer custody, the release store and verifier
+   installation. Preserve the packaged-version path for legacy releases.
+   Rehearse the signed workflow in the intended deployment environment.
 3. Finish Auth registration and requester mapping for the three production
    hosts. The [local Auth candidate](qualification/CONTINUUM_AUTH_PRODUCTION_GATES.md)
    implements deliberate OIDC entry, host-local sessions, logout and

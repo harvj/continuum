@@ -1,5 +1,13 @@
 # Continuum status
 
+## SH-07 exact-artifact release identity
+
+The local candidate verifies signed launch bindings, numbered release
+candidates, independent acceptance and publication evidence, same-process
+footer transition, and rollback. Real Auth, production registry ownership,
+and trusted v2 preflight acceptance remain open. See the
+[SH-07 qualification record](qualification/CONTINUUM_SH07_RELEASE_IDENTITY.md).
+
 ## v0.2.0 owner authorization and integration review
 
 The checksum-complete sealed candidate passed frozen bundle verification and
