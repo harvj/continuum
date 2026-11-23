@@ -1,5 +1,13 @@
 # Continuum status
 
+## v0.2.0 production gate follow-up
+
+The local SH-09 lifecycle passed after fixing signed destination withdrawals.
+Production has no Continuum verifier cache installation yet. Auth confirmed
+that all three callback registrations and their requester mapping are still
+outstanding. Infrastructure's signed SH-02 and SH-06 decisions remain open.
+See the [registry qualification record](qualification/CONTINUUM_SH09_REGISTRY.md).
+
 ## Continuum Auth integration candidate
 
 The local v0.2.0 candidate adds host-local OIDC sessions and a signed-registry
