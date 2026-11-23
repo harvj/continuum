@@ -1,5 +1,13 @@
 # Continuum status
 
+## v0.2.0 owner authorization and integration review
+
+The checksum-complete sealed candidate passed frozen bundle verification and
+local Rails, browser and registry checks. The signed production preflight
+still blocks activation pending independent Infrastructure and Auth review,
+signed policy publication, actual registrations and verifier installation.
+Production remains v0.1.2. See the [owner handoff](qualification/CONTINUUM_V0.2.0_OWNER_HANDOFF.md).
+
 ## v0.2.0 production gate follow-up
 
 The local SH-09 lifecycle passed after fixing signed destination withdrawals.
