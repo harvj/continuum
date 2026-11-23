@@ -46,3 +46,7 @@ synthetic fixtures in both repositories before registering any artwork.
   services as part of a Continuum deployment.
 - Keep Continuum Engine trading controls, budgets, databases, and
   authorizations outside Continuum deployment scope.
+
+## Simple Operations
+
+Follow [Infrastructure Simple Operations v1.1](https://github.com/harvj/infrastructure/blob/main/docs/standards/simple-operations-v1.md). Use one dedicated non-root Unix account per application for deploy and runtime, with independent files, processes, writable directories, and PostgreSQL databases and roles. Restrict SSH and administrative access. Use one established deployment path (Capistrano for existing Rails apps) and one exact-release approval. Keep trusted CI, exact-artifact verification, reviewed migrations, verified backups and restore, health checks, and compatible application-only rollback. Prefer removing or consolidating controls. Explain the concrete need, existing alternatives, replacement, and upkeep before adding complexity. Obtain explicit operator approval for exceptions and new privileged machinery, required gates, persistent services, or authorization systems. Existing approved paths remain usable until individually migrated.
