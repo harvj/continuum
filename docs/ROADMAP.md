@@ -106,8 +106,11 @@ remain anonymously accessible. Coordinate this milestone with P1.1 content
 foundation, P1.3 navigation and the access model for editorial tools and P2.2
 Network features, before launching any protected workflows.
 
-1. Close the contrast gaps in the approved public artwork crops and qualify
-   the fixes with the published fixture set.
+1. Requalify the Library and Intelligence footer text for v0.2.0 after the
+   focus-only correction. Keep the exact scope of the original text approvals
+   and retain the independent focus check. Resolve the production v1.3.0
+   applicability and contrast gates before any release. See the
+   [v0.2.0 preflight record](qualification/CONTINUUM_V0.2.0_PREFLIGHT.md).
 2. Add durable candidate number allocation, exact archive and launch binding,
    authenticated acceptance/publication receipts and same-process footer
    refresh. Rehearse failure retention and rollback before replacing the

@@ -1,5 +1,13 @@
 # Continuum status
 
+## v0.2.0 release candidate
+
+The candidate adds a two-tone focus indicator to the Intelligence footer
+credit. Local browser and PostgreSQL tests passed. Signed v1.3.0 production
+preflight blocked the release on Auth, registry behavior and footer contrast.
+Infrastructure PR #20 is awaiting independent review. Production remains
+on v0.1.2. See the [release readiness record](qualification/CONTINUUM_V0.2.0_PREFLIGHT.md).
+
 ## Application Shell v2.0.0 local qualification
 
 Verified signed v2 inputs and the current signed v1.3.0 baseline. The local
