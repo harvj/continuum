@@ -1,5 +1,15 @@
 # Continuum status
 
+## Application Shell v2.0.0 local qualification
+
+Verified signed v2 inputs and the current signed v1.3.0 baseline. The local
+candidate exercises the public header and footer on all three hosts and the
+approved Network appearance pair. Continuum has no Auth-backed session, so
+SH-05 is not applicable to its current public pages. Library and Intelligence
+have measured footer contrast failures, and exact-artifact release receipts
+remain outstanding. See the [qualification record](qualification/APPLICATION_SHELL_V2.md)
+and [P1.5 roadmap](ROADMAP.md#p15--application-shell-readiness-and-auth-onboarding).
+
 ## v0.1.2 Site Art presentation
 
 Production runs `7c2d9cb797d0340b590ffa8439df607126bd18df`.

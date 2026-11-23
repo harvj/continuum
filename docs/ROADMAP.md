@@ -99,6 +99,36 @@ prepare reviewable configuration, validate isolated rollout, restore and rollbac
 then obtain explicit authorization for production service/DNS changes. Launch both
 hosts only after content, media, navigation and backup acceptance.
 
+## P1.5 — Application Shell readiness and Auth onboarding
+
+**Recommended next Shell milestone.** Public Network, Library and Intelligence
+remain anonymously accessible. Coordinate this milestone with P1.1 content
+foundation, P1.3 navigation and the access model for editorial tools and P2.2
+Network features, before launching any protected workflows.
+
+1. Close the contrast gaps in the approved public artwork crops and qualify
+   the fixes with the published fixture set.
+2. Add durable candidate number allocation, exact archive and launch binding,
+   authenticated acceptance/publication receipts and same-process footer
+   refresh. Rehearse failure retention and rollback before replacing the
+   existing production version path.
+3. Agree on client registration, canonical hosts and callbacks with Auth.
+   Implement the approved OIDC login, local authenticated session, logout
+   and invalidation only when the protected workflows have defined needs.
+4. Retain verified subject and username with the local session. Fetch fresh
+   session-bound grants independently for protected navigation. Exercise
+   outages, expiry, delayed responses, restoration, replacement and real
+   invalidation. Verify authorization at protected destinations as well as
+   in the application switcher.
+5. Exercise the Network appearance control on the same surface in both
+   authentication states, and retain the saved preference through login and
+   logout. Keep the control hidden on single-variant hosts. Complete signed
+   registry refresh and candidate-bound preflight evidence before requesting
+   v2 adoption.
+
+See the [v2 qualification and Auth inventory](qualification/APPLICATION_SHELL_V2.md).
+P1.1 remains the next content milestone.
+
 ## P2.0 — Medium/Substack migration and conversation extraction
 
 **Provisional.** Inventory actual exports, preserve source evidence and publication
