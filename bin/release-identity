@@ -1,0 +1,147 @@
+#!/usr/bin/env ruby
+
+require "fileutils"
+require "open3"
+require "tempfile"
+require "tmpdir"
+require_relative "../lib/continuum_release_identity"
+
+Release = ContinuumReleaseIdentity
+
+def capture!(*command)
+  output, status = Open3.capture2(*command)
+  Release.require!(status.success?, "Command failed: #{command.first}")
+  output
+end
+
+def immutable_write(path, contents)
+  Tempfile.create(".pending", File.dirname(path)) do |pending|
+    pending.binmode
+    pending.write(contents)
+    pending.flush
+    pending.fsync
+    pending.chmod(0o644)
+    File.link(pending.path, path)
+    File.open(File.dirname(path), &:fsync)
+  end
+end
+
+def issued_candidates(directory, key)
+  Dir.glob(File.join(directory, "*.json")).map do |path|
+    candidate = Release.identity!(Release.read(path, key), "candidate")
+    Release.require!(File.basename(path) == "#{candidate.fetch('candidate_number')}.json" &&
+      File.basename(directory) == candidate["target_version"], "Invalid candidate ledger")
+    candidate
+  end
+end
+
+def prepare(store, signer, source, kind)
+  Release.require!(Release::COMMIT.match?(source) && %w[development candidate].include?(kind), "Expected exact commit and identity kind")
+  Release.require!(capture!("git", "rev-parse", "--verify", "#{source}^{commit}").chomp == source, "Expected exact commit")
+  version = ContinuumVersion.parse(capture!("git", "show", "#{source}:VERSION"))
+  Dir.mktmpdir("package-", store) do |stage|
+    archive = File.join(stage, "source.tar.gz")
+    capture!("git", "archive", "--format=tar.gz", "--output=#{archive}", source)
+    sha256 = Digest::SHA256.file(archive).hexdigest
+    retained = File.join(store, "artifacts", "#{sha256}.tar.gz")
+    if File.exist?(retained)
+      Release.require!(Digest::SHA256.file(retained).hexdigest == sha256, "Stored archive checksum mismatch")
+    else
+      File.chmod(0o644, archive)
+      File.open(archive, &:fsync)
+      File.link(archive, retained)
+      File.open(File.dirname(retained), &:fsync)
+    end
+
+    identity = { "schema_version" => 1, "application" => "continuum", "kind" => kind,
+      "source_sha" => source, "artifact_sha256" => sha256, "target_version" => version }
+    if kind == "candidate"
+      ledger = File.join(store, "candidates", version)
+      FileUtils.mkdir_p(ledger)
+      issued = issued_candidates(ledger, signer)
+      previous = issued.find { |entry| entry["artifact_sha256"] == sha256 }
+      if previous
+        Release.require!(previous["source_sha"] == source, "Conflicting source for stored archive")
+        identity = previous
+      else
+        number = (issued.map { |entry| entry.fetch("candidate_number") }.max || 0) + 1
+        identity["candidate_number"] = number
+        immutable_write(File.join(ledger, "#{number}.json"), Release.seal(identity, signer))
+      end
+    end
+
+    marker = kind == "development" ? "dev" : "rc.#{identity.fetch('candidate_number')}"
+    destination = File.join(store, "releases", "#{sha256}-#{marker}")
+    if File.exist?(destination)
+      existing = Release::Running.new(root: destination, store: store,
+        trust_key: ENV.fetch("CONTINUUM_RELEASE_SIGNING_KEY"), packaged_version: version)
+      Release.require!(existing.identity == identity, "Existing launch binding differs from the issued identity")
+    else
+      tree = File.join(stage, "tree")
+      Dir.mkdir(tree, 0o755)
+      capture!("tar", "-xzf", retained, "-C", tree)
+      Release.require!(([Release::BINDING] + Release::GENERATED).none? { |name| File.exist?(File.join(tree, name)) || File.symlink?(File.join(tree, name)) },
+        "Archive contains a reserved launch path")
+      binding = { "schema_version" => 1, "kind" => "launch", "path" => destination,
+        "tree_sha256" => Release.tree_digest(tree), "identity" => identity }
+      immutable_write(File.join(tree, Release::BINDING), Release.seal(binding, signer))
+      File.rename(tree, destination)
+      File.open(File.dirname(destination), &:fsync)
+    end
+    puts JSON.generate("identity" => identity, "archive" => retained, "release" => destination)
+  end
+end
+
+def publish(store, signer, acceptance_path, publication_path)
+  acceptance = Release.read(acceptance_path, Release.key(ENV.fetch("CONTINUUM_ACCEPTANCE_TRUST_KEY")))
+  publication = Release.read(publication_path, Release.key(ENV.fetch("CONTINUUM_PUBLICATION_TRUST_KEY")))
+  Release.fields!(acceptance, %w[schema_version kind candidate reference accepted_at])
+  Release.fields!(publication, %w[schema_version kind candidate reference tag tag_source_sha artifact_sha256 published_at])
+  candidate = Release.identity!(acceptance["candidate"], "candidate")
+  version = candidate.fetch("target_version")
+  tag = "v#{version}"
+  sha256 = candidate.fetch("artifact_sha256")
+  issued = File.join(store, "candidates", version, "#{candidate.fetch('candidate_number')}.json")
+  Release.require!(Release.read(issued, signer) == candidate, "Candidate was not issued by this release store")
+  Release.require!(acceptance["schema_version"].eql?(1) && acceptance["kind"] == "acceptance" &&
+    publication["schema_version"].eql?(1) && publication["kind"] == "published-artifact" &&
+    publication["candidate"] == candidate && publication["tag"] == tag &&
+    publication["tag_source_sha"] == candidate["source_sha"] && publication["artifact_sha256"] == sha256,
+    "Acceptance and publication must bind the same exact source and archive")
+  Release.require!(Digest::SHA256.file(File.join(store, "artifacts", "#{sha256}.tar.gz")).hexdigest == sha256,
+    "Retained archive checksum mismatch")
+  now = Time.now.utc
+  receipt = Release.receipt!({ "schema_version" => 1, "kind" => "publication",
+    "candidate" => candidate, "final_version" => tag, "acceptance_ref" => acceptance["reference"],
+    "publication_ref" => publication["reference"], "accepted_at" => acceptance["accepted_at"],
+    "published_at" => publication["published_at"], "verified_at" => now.iso8601 }, now:)
+  path = File.join(store, "published", "#{version}.json")
+  if File.exist?(path)
+    previous = Release.receipt!(Release.read(path, signer), now:)
+    Release.require!(previous.except("verified_at") == receipt.except("verified_at"), "Final release already has different verified evidence")
+    receipt = previous
+  else
+    immutable_write(path, Release.seal(receipt, signer))
+  end
+  puts JSON.generate(receipt)
+end
+
+begin
+  action, root, *arguments = ARGV
+  Release.require!(%w[prepare publish].include?(action) && root && arguments.size == 2,
+    "Usage: bin/release-identity prepare STORE FULL_SHA development|candidate\n" \
+    "       bin/release-identity publish STORE SIGNED_ACCEPTANCE SIGNED_PUBLICATION")
+  store = File.realpath(root)
+  signer = Release.key(ENV.fetch("CONTINUUM_RELEASE_SIGNING_KEY"))
+  %w[artifacts candidates published releases].each { |name| FileUtils.mkdir_p(File.join(store, name)) }
+  File.open(File.join(store, "release.lock"), File::RDWR | File::CREAT, 0o600) do |lock|
+    lock.flock(File::LOCK_EX)
+    if action == "prepare"
+      prepare(store, signer, *arguments)
+    else
+      publish(store, signer, *arguments)
+    end
+  end
+rescue Release::Invalid, KeyError, SystemCallError, IOError, OpenSSL::PKey::PKeyError, ArgumentError => error
+  abort "Continuum release identity refused: #{error.message}"
+end

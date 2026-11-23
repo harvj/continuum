@@ -57,6 +57,6 @@
     </header>
     <main id="main-content" tabindex="-1" data-art-role="default" aria-label="<%= @section.capitalize %>"></main>
     <footer data-art-role="bottom"><span>© <%= Date.current.year %> <%= link_to "Jim Harvey", "https://harvj.com" %></span>
-      <span class="release-version">Continuum v<%= Rails.application.config.x.version %></span></footer>
+      <span class="release-version">Continuum <%= @release_label %></span></footer>
   </body>
 </html>

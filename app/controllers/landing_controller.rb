@@ -10,6 +10,8 @@ class LandingController < ActionController::Base
 
   def show
     @section = section
+    config = Rails.application.config.x
+    @release_label = config.release_identity&.label || "v#{config.version}"
     @auth_session = resolve_session
     @auth_registration = auth_registration if @auth_session
     snapshot = artwork.snapshot
