@@ -47,11 +47,14 @@ administrator TOTP requirement and existing clients intact.
 - Auth verified one eligible, attested owner with MFA enrolled. Its local
   candidate `8820ca10c286abdbc4838fa990f0ff1f98fa907a` implements
   `password_sufficient` for approved confidential first-party OpenID
-  requests with S256 PKCE. Auth reported 204 passing specs, with RuboCop
-  and dependency audit clean. Tests cover password sign-in for an enrolled
+  requests with S256 PKCE. Auth reported 204 passing specs and 28 Chrome
+  examples, with RuboCop and dependency audit clean. Tests cover password sign-in for an enrolled
   user on all three clients, existing native and administrator MFA, and
   the achieved assurance claim for a session that completed MFA. Exact-SHA
-  review and protected release evidence remain pending.
+  acceptance and protected release evidence remain pending in
+  [Auth PR #14](https://github.com/harvj/auth/pull/14). Its hosted PR check
+  runs on a test merge with the same tree as the exact head. Keep its
+  evidence distinct from checks that explicitly ran on the head SHA.
 
 ## Activation evidence
 
