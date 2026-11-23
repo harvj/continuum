@@ -1,0 +1,15 @@
+<details class="shell-session" data-context="<%= auth_session.shell_context %>">
+  <summary>
+    <span class="shell-session-dot" aria-hidden="true"></span>
+    <span class="shell-session-name"><%= auth_session.username || "Signed in" %></span>
+    <span class="shell-session-chevron" aria-hidden="true"></span>
+  </summary>
+  <div class="shell-session-panel">
+    <section class="shell-applications" hidden aria-label="Applications">
+      <p>Applications</p>
+      <ul></ul>
+    </section>
+    <%= link_to "Account Settings", "#{ContinuumAuth::ISSUER}/account?#{URI.encode_www_form(client_id: registration.id)}" %>
+    <%= button_to "Log Out", "/logout", method: :post %>
+  </div>
+</details>

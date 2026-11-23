@@ -1,4 +1,5 @@
 class LandingController < ActionController::Base
+  include ContinuumSessionAccess
   SECTIONS = %w[network library intelligence].freeze
   ARTWORK = %w[background favicon favicon_png].freeze
   NETWORK_MODES = %w[light dark].freeze
@@ -9,6 +10,8 @@ class LandingController < ActionController::Base
 
   def show
     @section = section
+    @auth_session = resolve_session
+    @auth_registration = auth_registration if @auth_session
     snapshot = artwork.snapshot
     @background = snapshot[artwork_id("background")]
     variants = network_variants(snapshot)

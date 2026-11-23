@@ -13,6 +13,10 @@
       <% end %>
     <% end %>
     <link rel="stylesheet" href="/continuum.css">
+    <% if @auth_session %>
+      <link rel="stylesheet" href="/shell-session.css">
+      <script src="/shell-session.js" defer></script>
+    <% end %>
     <% if @background || @backgrounds %>
       <script src="/site-art.js" defer></script>
     <% end %>
@@ -46,12 +50,10 @@
         <% LandingController::SECTIONS.each do |section| %>
           <%= link_to section.capitalize, "https://#{section}.harvj.com/", aria: { current: ("page" if @section == section) } %>
         <% end %>
-        <a href="https://auth.harvj.com" aria-label="Home">
-          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>
-          </svg>
-        </a>
       </nav>
+      <% if @auth_session %>
+        <%= render "session_dropdown", auth_session: @auth_session, registration: @auth_registration %>
+      <% end %>
     </header>
     <main id="main-content" tabindex="-1" data-art-role="default" aria-label="<%= @section.capitalize %>"></main>
     <footer data-art-role="bottom"><span>© <%= Date.current.year %> <%= link_to "Jim Harvey", "https://harvj.com" %></span>

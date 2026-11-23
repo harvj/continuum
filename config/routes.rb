@@ -5,6 +5,10 @@ Rails.application.routes.draw do
   LandingController::SECTIONS.each do |section|
     constraints host: "#{section}.harvj.com" do
       root "landing#show", as: "#{section}_home"
+      get "login", to: "auth_sessions#login"
+      get "auth/callback", to: "auth_sessions#callback"
+      get "shell/destinations", to: "auth_sessions#destinations"
+      post "logout", to: "auth_sessions#destroy"
       get "favicon.ico", to: "landing#favicon_discovery", format: false
       get "favicon/neutral.svg", to: "landing#neutral_favicon", format: false
       get "favicon/:digest.:extension", to: "landing#favicon",

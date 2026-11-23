@@ -28,8 +28,7 @@ class LandingTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_select "header .wordmark[href='https://harvj.com']", text: "harvj."
       assert_select "nav a" do |links|
-        assert_equal %w[Network Library Intelligence Home], links.map { |link| link["aria-label"] || link.text }
-        assert_equal "https://auth.harvj.com", links.last["href"]
+        assert_equal %w[Network Library Intelligence], links.map(&:text)
       end
       assert_select "nav a[aria-current=page]", count: 1, text: section.capitalize
       assert_select "main", text: ""

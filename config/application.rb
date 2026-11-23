@@ -15,6 +15,8 @@ module Continuum
     config.active_storage.service = :local
     config.active_storage.draw_routes = false
     config.public_file_server.enabled = true
+    config.filter_parameters += %i[code state nonce verifier grant token client_secret]
+    config.session_store :cookie_store, key: "__Host-continuum-csrf", secure: true, httponly: true, same_site: :lax, path: "/"
     config.x.site_art_root = ENV.fetch("SITE_ART_ROOT", "/var/www/site-art/public")
     config.content_security_policy do |policy|
       policy.default_src :none
@@ -22,6 +24,8 @@ module Continuum
       policy.script_src :self
       policy.font_src :self
       policy.img_src :self
+      policy.connect_src :self
+      policy.form_action :self
       policy.base_uri :none
       policy.frame_ancestors :none
     end
