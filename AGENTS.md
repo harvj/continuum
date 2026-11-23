@@ -46,3 +46,19 @@ synthetic fixtures in both repositories before registering any artwork.
   services as part of a Continuum deployment.
 - Keep Continuum Engine trading controls, budgets, databases, and
   authorizations outside Continuum deployment scope.
+
+
+### Application Shell qualification
+
+- Keep optional Shell v2 evidence in [docs/qualification](docs/qualification) and
+  use the signed current v1.3.0 baseline for production preflight.
+- Use the exact reviewed Infrastructure approval revision recorded in the
+  [v2 qualification](docs/qualification/APPLICATION_SHELL_V2.md). Only the
+  listed Library and Intelligence footer text and credit crops are eligible.
+  Test the credit target, accessible name, keyboard reachability, wrapping,
+  and visible focus independently.
+- Record measured ratios and keep `pass`, `approved_exception`, and
+  `unresolved` distinct. Refer below-target cases outside the approval to
+  review. Requalify material artwork, crop, foreground, typography, markup,
+  or accessibility changes. Keep qualification approval IDs out of signed
+  fixtures and production preflight records.

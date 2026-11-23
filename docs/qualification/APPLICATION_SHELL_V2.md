@@ -29,6 +29,19 @@ signed current pointer and all manifest-bound files. The existing
 returned v1.3.0, `shell-v1`, registry schema 1, and no Continuum exceptions.
 No production review or approval was produced.
 
+For the separate footer text qualification, pinned Infrastructure approval
+revision `6f029a3117f0de6aa55757febe8242fa8498550c` on local review branch
+`codex/continuum-footer-contrast`. The record and definitions are in
+`docs/qualification/continuum-footer-contrast.md` and
+`docs/qualification/continuum-footer-contrast.json` at that revision.
+The JSON SHA-256 is
+`158b355424ecde968afcd0205df075fa67d52f90cc8560c1ce425ab3890d0a46`.
+At qualification time GitHub had no review branch or PR for this commit.
+Use this exact local Git object for review handoff. Remote review
+availability remains pending authorized publication by Infrastructure.
+The two IDs are application qualification approvals, separate from the
+signed exception registry and production preflight.
+
 The verified local Site Art build from `9dc3c2df720c31be90ef52258d00d475fabc581a`
 matched the published Continuum records and artwork digests in release
 `f9ef3c97194705a80c9ef26c3a57ed6e3ee6af969255b283cd73c6a62fcfebfd`.
@@ -71,7 +84,7 @@ with Rails-rendered pages and the exact candidate's static assets.
 | SH-03 signed-in disclosure | Not applicable on these public routes. No account disclosure, settings or logout exists. |
 | SH-04 registry | Both verified registries match the signed fixture order and map `continuum` to `Library` at its canonical URL. On all three hosts only the public Library link is rendered from those destinations. The authenticated ordering, omission and grant vectors require a registered consumer. |
 | SH-05 session and grants | Not applicable. See the Auth inventory. No formal v1 exception was assumed or claimed. |
-| SH-06 appearance and artwork | Anonymous Network pair behavior passes. Library and Intelligence correctly hide the control. Their footer contrast fails the sampled 4.5:1 criterion. See measurements below. |
+| SH-06 appearance and artwork | Anonymous Network pair behavior and sampled text contrast pass. Library and Intelligence correctly hide the control. Their scoped below-target footer and credit text have `approved_exception` results. Credit focus visibility passed in the tested states, and outline contrast remains a separate check. |
 | SH-07 footer and release identity | Calendar year rollover, credit link, wrapping and the packaged `VERSION` baseline pass. The v2 immutable RC and receipt lifecycle is missing. See the release probes below. |
 | SH-08 scope and rollback | Exercised all three public landing hosts with the same candidate and existing host boundaries. The rollback probe was local. Production adoption evidence remains a separate review. |
 | SH-09 runtime registry | Missing for full adoption. Anonymous rendering is local and contains no protected switcher links. Runtime refresh and last-verified registry persistence require an application adapter. |
@@ -92,20 +105,52 @@ kept the previous complete treatment; a failed initial decode kept the neutral
 theme and the stored preference. The forced-colors test suppressed the artwork.
 A signed-in appearance test requires the future Auth integration.
 
-Minimum sampled contrast beneath solid glyph pixels, including the resolved
-shadow where present. These are sampled crops and do not certify every
-interactive or viewport state.
+### Scoped footer contrast dispositions
 
-| Surface | 1440 × 900 header / footer | 390 × 844 header / footer |
-| --- | --- | --- |
-| Network light | 5.13 / 5.02 | 4.75 / 4.55 |
-| Network dark | 6.10 / 17.32 | 6.45 / 16.87 |
-| Library | 7.97 / **2.66** | 7.16 / **2.03** |
-| Intelligence | 12.62 / **2.39** | 12.99 / **2.35** |
+Remeasured the exact candidate archive in Brave Chromium 158.0.8127.42 using
+the verified Site Art records. Compared matched screenshots with and without
+text paint at solid foreground pixels, retaining the resolved glyph shadow
+where present. Samples inside the credit link bounds were measured separately
+from ordinary footer text. The seven approved presentation file fingerprints,
+asset digest and presentation record matched. See the
+[machine-readable measurements](APPLICATION_SHELL_V2_FOOTER_RESULTS.json)
+for browser capture hashes and per-element outcomes.
 
-Resolve both footer failures with reviewed Site Art treatment or a traceable
-application-owned accessibility treatment, then remeasure the rendered crops.
-The approved source files and their metadata were kept intact.
+| Host and mode | Viewport | Footer text | Jim Harvey link | Text result for both |
+| --- | --- | ---: | ---: | --- |
+| Network light | 1440 × 900 | 6.6877:1 | 5.0150:1 | `pass` |
+| Network light | 390 × 844 | 6.4557:1 | 4.5488:1 | `pass` |
+| Network dark | 1440 × 900 | 17.3166:1 | 17.4703:1 | `pass` |
+| Network dark | 390 × 844 | 16.8704:1 | 16.1257:1 | `pass` |
+| Library | 1440 × 900 | 2.6562:1 | 4.3644:1 | `approved_exception` · `continuum-library-footer-contrast` |
+| Library | 390 × 844 | 2.0292:1 | 4.0784:1 | `approved_exception` · `continuum-library-footer-contrast` |
+| Intelligence | 1440 × 900 | 2.6802:1 | 2.3931:1 | `approved_exception` · `continuum-intelligence-footer-contrast` |
+| Intelligence | 390 × 844 | 2.7450:1 | 2.3473:1 | `approved_exception` · `continuum-intelligence-footer-contrast` |
+
+The reference classifier yielded eight `pass` and eight
+`approved_exception` element measurements. It returns `unresolved` for
+below-target results outside the exact approval or below the approved
+per-element minimum at four-decimal precision, and when retained checks fail.
+The approvals apply only to these two anonymous `/` bottom-role normal-color
+crops after the approved image loads. Network, headers, navigation, menus,
+article content, other controls, unmeasured viewports, forced colors and
+fallback remain subject to the ordinary checks. Prior sampled header contrast
+remains above target at both crops on all three hosts.
+
+On Library and Intelligence at both crops, Tab reached the native link to
+`https://harvj.com/`. The accessibility tree exposed a link named **Jim
+Harvey**. The visible credit was underlined and an identifiable 2 CSS px
+solid outline appeared on keyboard focus in normal colors, forced colors,
+and image-decode fallback. The normal-color outline on Intelligence has low
+contrast along much of its perimeter. Outline contrast remains `unresolved`
+as a separate numerical check and carries no approval ID. A visible focus
+indicator and these text dispositions do not establish WCAG conformance.
+
+Requalify after material changes to artwork, crop, effective foreground or
+shadow, typography, markup, or accessibility behavior. Requalification also
+applies when effects change without changing the fingerprints listed by
+Infrastructure. New below-target crops, or readings worse than the approved
+minima, require separate review. Results at or above 4.5:1 are passes.
 
 ### Release identity probes
 
@@ -135,10 +180,12 @@ digests before exercising applicable cases. The candidate ran 16 Rails tests
 with disposable PostgreSQL and 364 assertions, plus four tracked inventory
 tests. The reviewed Infrastructure reference suite ran 47 tests with one
 skip; its fixture bytes matched the signed v2 fixture. Reference results
-are separate from the application results above.
+are separate from the application results above. The footer adoption reran
+16 Rails tests with disposable PostgreSQL, 364 assertions, and no skips.
+Both Infrastructure classifier tests passed.
 
 Recommend [P1.5 — Application Shell readiness and Auth onboarding](../ROADMAP.md#p15--application-shell-readiness-and-auth-onboarding).
 Implement the artifact and publication workflow in disposable releases,
-address approved-crop contrast, and coordinate Auth registration and grant
+address remaining accessibility contrast, and coordinate Auth registration and grant
 handling with the future editorial and Network requirements. Run full
 candidate-bound verification again before proposing v2 adoption.

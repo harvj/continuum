@@ -1,0 +1,371 @@
+{
+  "infrastructure_approval_revision": "6f029a3117f0de6aa55757febe8242fa8498550c",
+  "approval_record_sha256": "158b355424ecde968afcd0205df075fa67d52f90cc8560c1ce425ab3890d0a46",
+  "shell_version": "2.0.0",
+  "shell_manifest_sha256": "0f564d284b70ea547f28168df15a7ef59692ca24d0d3775d15947b0723dd898e",
+  "shell_fixtures_sha256": "8efa16791c0af1f3a96047d7d4180ac3607b333ba34bef2acc1dfcebd8bfb944",
+  "continuum_candidate": "f9158292fdc8d4fb5edc0bfa8d331f90ccb5292b",
+  "continuum_archive_sha256": "242bf4b100f42a6cc2fa367809433cf04ae9038d3508620571bd775150cca006",
+  "browser": "Brave Chromium 158.0.8127.42",
+  "site_art_release": "f9ef3c97194705a80c9ef26c3a57ed6e3ee6af969255b283cd73c6a62fcfebfd",
+  "credit_link": {
+    "href": "https://harvj.com/",
+    "accessible_name": "Jim Harvey"
+  },
+  "measurements": [
+    {
+      "host": "network.harvj.com",
+      "asset_id": "continuum.network_background_light",
+      "asset_sha256": "48b8559fc0cf00fecc7c3654af5b36f1fd74a537eab43535c40046c8ea34e3e1",
+      "viewport_css_px": [
+        1440,
+        900
+      ],
+      "computed_foreground": "#FAFCFF",
+      "captures_sha256": {
+        "visible": "aa2105c4288be942ea31b315098ee20301505842cc9cd1df24a3f638ecdc6267",
+        "behind": "f3269411248b0a4561b3e25af6455e33117f3983df6e86d3e09c6a493912449a",
+        "focus": "f267b4fdacde646d25bca402a8312039a988c4e25168f282f67a4842111de32c"
+      },
+      "text_contrast": {
+        "footer_text": {
+          "minimum_contrast": 6.6877,
+          "pixels": 98,
+          "status": "pass"
+        },
+        "credit_text": {
+          "minimum_contrast": 5.015,
+          "pixels": 131,
+          "status": "pass"
+        }
+      },
+      "keyboard_focus_outline": {
+        "pixels": 261,
+        "minimum_contrast": 1.2367,
+        "pixels_at_least_3_to_1": 254,
+        "width_css_px": 2,
+        "contrast_exception_applies": false
+      }
+    },
+    {
+      "host": "network.harvj.com",
+      "asset_id": "continuum.network_background_dark",
+      "asset_sha256": "f8de4582f22ffc38cc8adb2f228407abb1491dab4430971f9e440c2fb3ad383a",
+      "viewport_css_px": [
+        1440,
+        900
+      ],
+      "computed_foreground": "#FAFCFF",
+      "captures_sha256": {
+        "visible": "2577f7956dbe4306268383ad9e77411a03a3b64bf433fb767876a6ddae5b4bc1",
+        "behind": "3807bfcc9ed7386819b920fc725c34b08167ec83749a07c2ab0433a959c07b0e"
+      },
+      "text_contrast": {
+        "footer_text": {
+          "minimum_contrast": 17.3166,
+          "pixels": 117,
+          "status": "pass"
+        },
+        "credit_text": {
+          "minimum_contrast": 17.4703,
+          "pixels": 373,
+          "status": "pass"
+        }
+      }
+    },
+    {
+      "host": "library.harvj.com",
+      "asset_id": "continuum.library_background",
+      "asset_sha256": "1b7d7735715d64f247ae41e08d15feda0402596315a63368144eb2e71da4497b",
+      "viewport_css_px": [
+        1440,
+        900
+      ],
+      "computed_foreground": "#F5F1E9",
+      "captures_sha256": {
+        "visible": "5c5eab16a565b8435f58a90ea76d4208116ddf9560c095071255c94b9e218257",
+        "behind": "a173825b97a079a67c7f595fb8314f9f92d78744c6e5bfe2411b8b6f0ed50d2e",
+        "focus": "b316bad8ebfae4f41121913ff6f1f32d4cbb1074ad1e0c61a6b3dcc8717a5832"
+      },
+      "text_contrast": {
+        "footer_text": {
+          "minimum_contrast": 2.6562,
+          "pixels": 98,
+          "status": "approved_exception",
+          "exception_id": "continuum-library-footer-contrast"
+        },
+        "credit_text": {
+          "minimum_contrast": 4.3644,
+          "pixels": 131,
+          "status": "approved_exception",
+          "exception_id": "continuum-library-footer-contrast"
+        }
+      },
+      "keyboard_focus_outline": {
+        "pixels": 261,
+        "minimum_contrast": 1.1859,
+        "pixels_at_least_3_to_1": 252,
+        "width_css_px": 2,
+        "contrast_exception_applies": false
+      },
+      "other_focus_states": {
+        "forced-colors": {
+          "verified_credit_link": true,
+          "captures_sha256": {
+            "before": "f1cc5023d09a1e0ce2e6cf2ff415ae59facb17c49aa517ec40d22010b87e0cdb",
+            "focus": "98ca7198c48540949e218da9c73232baabaebb51f4fe2e3476b657e437f54175"
+          },
+          "pixels": 328,
+          "minimum_contrast": 1.0231,
+          "pixels_at_least_3_to_1": 254
+        },
+        "fallback": {
+          "verified_credit_link": true,
+          "captures_sha256": {
+            "before": "288498699de1e8d845e20ec86a2cf21e80f535741c8794e0398a2262e012513b",
+            "focus": "c913411375b40757684fe26794c865fa6a8d118c60c5a9c7acd8ec2c102741c2"
+          },
+          "pixels": 261,
+          "minimum_contrast": 2.0258,
+          "pixels_at_least_3_to_1": 258
+        }
+      }
+    },
+    {
+      "host": "intelligence.harvj.com",
+      "asset_id": "continuum.intelligence_background",
+      "asset_sha256": "818c56dfaa38ef338e13c2a68d72e5c8d962a8b96c33746d94ab5d235468077e",
+      "viewport_css_px": [
+        1440,
+        900
+      ],
+      "computed_foreground": "#FFF8EC",
+      "captures_sha256": {
+        "visible": "2866da232bec606fb08d31b2c20f5d73c49ef5f6947ea59759347a22ee54cb18",
+        "behind": "5b20b7bdc1d931a58f8cd52861785ba469d1873b72c1c83db99362c1d9421ee7",
+        "focus": "6c196036bd0a7abfdb708eee5e2769c07c4ff7bd7ce26f38780f148796313d8d"
+      },
+      "text_contrast": {
+        "footer_text": {
+          "minimum_contrast": 2.6802,
+          "pixels": 118,
+          "status": "approved_exception",
+          "exception_id": "continuum-intelligence-footer-contrast"
+        },
+        "credit_text": {
+          "minimum_contrast": 2.3931,
+          "pixels": 138,
+          "status": "approved_exception",
+          "exception_id": "continuum-intelligence-footer-contrast"
+        }
+      },
+      "keyboard_focus_outline": {
+        "pixels": 261,
+        "minimum_contrast": 1.0972,
+        "pixels_at_least_3_to_1": 10,
+        "width_css_px": 2,
+        "contrast_exception_applies": false,
+        "contrast_status": "unresolved"
+      },
+      "other_focus_states": {
+        "forced-colors": {
+          "verified_credit_link": true,
+          "captures_sha256": {
+            "before": "f63c139724c12dfbc7036f4a255278ea04280bea0e15c46ca927967aa72633d6",
+            "focus": "f86e087abc698af8d995a2ad1b4980c3432c344105e6fea9effc2daf8fbe8e35"
+          },
+          "pixels": 328,
+          "minimum_contrast": 1.0231,
+          "pixels_at_least_3_to_1": 254
+        },
+        "fallback": {
+          "verified_credit_link": true,
+          "captures_sha256": {
+            "before": "bbfef06628e8c673c3f7ae6e974f310a445e65ad43632cfe2652fb4a17b2982c",
+            "focus": "cb6e32bf6dbd91f43da04074ce9390215632347c1a1e76b2a8056e7deb00621b"
+          },
+          "pixels": 261,
+          "minimum_contrast": 1.256,
+          "pixels_at_least_3_to_1": 255
+        }
+      }
+    },
+    {
+      "host": "network.harvj.com",
+      "asset_id": "continuum.network_background_light",
+      "asset_sha256": "48b8559fc0cf00fecc7c3654af5b36f1fd74a537eab43535c40046c8ea34e3e1",
+      "viewport_css_px": [
+        390,
+        844
+      ],
+      "computed_foreground": "#FAFCFF",
+      "captures_sha256": {
+        "visible": "2b7280dbc0100820f7856530ffbc61d1578b81a1d847d98724d6f5debd2bb10f",
+        "behind": "ad8bea3ba5f5797a27acc8e8655dbc2933a2f859badbe0473d6d93277b515ce8",
+        "focus": "12e575218247b6fe3b3739dbe20b73258ed870ebda27febaa3cb84f47f895e50"
+      },
+      "text_contrast": {
+        "footer_text": {
+          "minimum_contrast": 6.4557,
+          "pixels": 98,
+          "status": "pass"
+        },
+        "credit_text": {
+          "minimum_contrast": 4.5488,
+          "pixels": 131,
+          "status": "pass"
+        }
+      },
+      "keyboard_focus_outline": {
+        "pixels": 261,
+        "minimum_contrast": 1.2483,
+        "pixels_at_least_3_to_1": 255,
+        "width_css_px": 2,
+        "contrast_exception_applies": false
+      }
+    },
+    {
+      "host": "network.harvj.com",
+      "asset_id": "continuum.network_background_dark",
+      "asset_sha256": "f8de4582f22ffc38cc8adb2f228407abb1491dab4430971f9e440c2fb3ad383a",
+      "viewport_css_px": [
+        390,
+        844
+      ],
+      "computed_foreground": "#FAFCFF",
+      "captures_sha256": {
+        "visible": "ad8901164a16f87d10eaed43af017d11a03f237454622ae0894fa94d973a9c11",
+        "behind": "45b0bef3fdcab00bf0196940e3195383bc73651346694667aae4087044a4686b"
+      },
+      "text_contrast": {
+        "footer_text": {
+          "minimum_contrast": 16.8704,
+          "pixels": 117,
+          "status": "pass"
+        },
+        "credit_text": {
+          "minimum_contrast": 16.1257,
+          "pixels": 373,
+          "status": "pass"
+        }
+      }
+    },
+    {
+      "host": "library.harvj.com",
+      "asset_id": "continuum.library_background",
+      "asset_sha256": "1b7d7735715d64f247ae41e08d15feda0402596315a63368144eb2e71da4497b",
+      "viewport_css_px": [
+        390,
+        844
+      ],
+      "computed_foreground": "#F5F1E9",
+      "captures_sha256": {
+        "visible": "12374e0356b53d7de958babf4be4fbfe37dee474c53cb9aec5d183a0a4e9a192",
+        "behind": "bfd0534b1683ef68bbd77b7f76bc6f7675d7a88345f68d5578e9313653c31cba",
+        "focus": "ecb63f37569aead2cfbdc22ef12dcde284f2cf51e37331f0e6d2dd0f3629b6e9"
+      },
+      "text_contrast": {
+        "footer_text": {
+          "minimum_contrast": 2.0292,
+          "pixels": 98,
+          "status": "approved_exception",
+          "exception_id": "continuum-library-footer-contrast"
+        },
+        "credit_text": {
+          "minimum_contrast": 4.0784,
+          "pixels": 131,
+          "status": "approved_exception",
+          "exception_id": "continuum-library-footer-contrast"
+        }
+      },
+      "keyboard_focus_outline": {
+        "pixels": 261,
+        "minimum_contrast": 1.1488,
+        "pixels_at_least_3_to_1": 251,
+        "width_css_px": 2,
+        "contrast_exception_applies": false
+      },
+      "other_focus_states": {
+        "forced-colors": {
+          "verified_credit_link": true,
+          "captures_sha256": {
+            "before": "054e590a6125bba56a0958e40bfa1f88944fd8372a8813a5fe2700bea6c58145",
+            "focus": "0e3552353ad6a4a027764e836198da8d8ffcee22311019af33bfe61bf5e5e754"
+          },
+          "pixels": 328,
+          "minimum_contrast": 1.0231,
+          "pixels_at_least_3_to_1": 254
+        },
+        "fallback": {
+          "verified_credit_link": true,
+          "captures_sha256": {
+            "before": "6e8d6d3ae019253315801ba13cbbc0fcc60e8d87f1be21a5bb4a91212e65f3d9",
+            "focus": "ae535f152e619705c17ebf134b1724abbf3d91951e0b3ea998210f25f5e07c84"
+          },
+          "pixels": 261,
+          "minimum_contrast": 2.0258,
+          "pixels_at_least_3_to_1": 258
+        }
+      }
+    },
+    {
+      "host": "intelligence.harvj.com",
+      "asset_id": "continuum.intelligence_background",
+      "asset_sha256": "818c56dfaa38ef338e13c2a68d72e5c8d962a8b96c33746d94ab5d235468077e",
+      "viewport_css_px": [
+        390,
+        844
+      ],
+      "computed_foreground": "#FFF8EC",
+      "captures_sha256": {
+        "visible": "675f5aa80d29f055018f64fdca8b7ef54157b02499ae10f3cb6cd404061ca5e1",
+        "behind": "1382d5f760e91ab4a0bd89c1cc6f185e3cc5471a314fe652cef13de45bed9070",
+        "focus": "300ef831c5d94926d646e364cd3e1d5fa65a08183247dd354a6926aa5c2ea838"
+      },
+      "text_contrast": {
+        "footer_text": {
+          "minimum_contrast": 2.745,
+          "pixels": 118,
+          "status": "approved_exception",
+          "exception_id": "continuum-intelligence-footer-contrast"
+        },
+        "credit_text": {
+          "minimum_contrast": 2.3473,
+          "pixels": 138,
+          "status": "approved_exception",
+          "exception_id": "continuum-intelligence-footer-contrast"
+        }
+      },
+      "keyboard_focus_outline": {
+        "pixels": 261,
+        "minimum_contrast": 1.0972,
+        "pixels_at_least_3_to_1": 9,
+        "width_css_px": 2,
+        "contrast_exception_applies": false,
+        "contrast_status": "unresolved"
+      },
+      "other_focus_states": {
+        "forced-colors": {
+          "verified_credit_link": true,
+          "captures_sha256": {
+            "before": "1a2a70d4b89791f48e2c2fa2f8c1c6b2f0ef6ee1884d93026e6c182f41bb072f",
+            "focus": "d2b55d58f61cb9b9fcd02621ec6d22e3613b0aded7c54826f9621e68da8f963b"
+          },
+          "pixels": 328,
+          "minimum_contrast": 1.0231,
+          "pixels_at_least_3_to_1": 254
+        },
+        "fallback": {
+          "verified_credit_link": true,
+          "captures_sha256": {
+            "before": "5abcbe6ec81b6f7855c98b36358f4c8db36d298539b315eb93eab2ffc8d3305b",
+            "focus": "7e458b2ef30b4d5d3abec32a8fb77aece64b9263f6ec3f6555ef11d92d77b466"
+          },
+          "pixels": 261,
+          "minimum_contrast": 1.256,
+          "pixels_at_least_3_to_1": 255
+        }
+      }
+    }
+  ]
+}
