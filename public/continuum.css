@@ -94,6 +94,18 @@ footer {
 }
 footer span { overflow-wrap: anywhere; }
 footer a { display: inline-block; text-decoration: underline; text-underline-offset: .2em; }
+/* An adjacent dark ring keeps the credit focus indicator distinct over light art. */
+body.intelligence footer a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #181818;
+}
+@media (forced-colors: active) {
+  body.intelligence footer a:focus-visible {
+    outline-color: Highlight;
+    box-shadow: none;
+  }
+}
 body:has(.appearance:not([hidden])) {
   --appearance-panel-width: 128px;
   --appearance-inset-right: max(12px, env(safe-area-inset-right));
