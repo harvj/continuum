@@ -41,14 +41,16 @@ class ShellRegistry
     return unless entries.is_a?(Array) && entries.size <= 64 && entries.all? { |entry| valid_entry?(entry) } &&
       entries.pluck("id").uniq.size == entries.size && entries.pluck("canonical_url").uniq.size == entries.size
 
-    @entries = entries.map { |entry| entry.slice("id", "name", "canonical_url").transform_values(&:freeze).freeze }.freeze
+    @entries = entries.filter_map do |entry|
+      entry.slice("id", "name", "canonical_url").transform_values(&:freeze).freeze if entry["availability"] == "production"
+    end.freeze
     @sequence = data["sequence"]
   rescue SystemCallError, JSON::ParserError, URI::Error, IOError, ArgumentError
     # Retain the most recent valid snapshot when the publisher is unavailable.
   end
 
   def valid_entry?(entry)
-    return false unless entry.is_a?(Hash) && entry["availability"] == "production"
+    return false unless entry.is_a?(Hash) && entry["availability"].in?(%w[production withdrawn])
 
     id, name, url = entry.values_at("id", "name", "canonical_url")
     return false unless id.is_a?(String) && ContinuumAuth::DESTINATION.match?(id) && !EXCLUDED.include?(id) &&
