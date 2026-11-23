@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title><%= @section.capitalize %> · Continuum</title>
     <% if @favicons.empty? %>
       <link rel="icon" type="image/svg+xml" sizes="any" href="<%= LandingController::NEUTRAL_FAVICON_PATH %>">
@@ -13,7 +13,7 @@
       <% end %>
     <% end %>
     <link rel="stylesheet" href="/continuum.css">
-    <% if @background %>
+    <% if @background || @backgrounds %>
       <script src="/site-art.js" defer></script>
     <% end %>
   </head>
@@ -22,6 +22,24 @@
       <%= tag.img class: "background", src: "/background/#{@background.digest}", alt: "", aria: { hidden: true },
         data: { art_presentation: @background.presentation, art_legacy: @background.foreground }.compact %>
     <% end %>
+    <% @backgrounds&.each do |mode, asset| %>
+      <template data-art-mode="<%= mode %>">
+        <%= tag.img class: "background", src: "/background/#{asset.digest}", alt: "", aria: { hidden: true },
+          data: { art_presentation: asset.presentation, art_legacy: asset.foreground }.compact %>
+      </template>
+    <% end %>
+    <% if @backgrounds %>
+      <details class="appearance" hidden>
+        <summary aria-label="Appearance settings"><span aria-hidden="true">◐</span></summary>
+        <fieldset>
+          <legend>Appearance</legend>
+          <% %w[system light dark].each do |mode| %>
+            <label><%= tag.input type: "radio", name: "appearance", value: mode, checked: mode == "system" %> <%= mode.capitalize %></label>
+          <% end %>
+        </fieldset>
+      </details>
+    <% end %>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <header data-art-role="top">
       <a class="wordmark" href="https://harvj.com">harvj.</a>
       <nav aria-label="Primary">
@@ -35,7 +53,8 @@
         </a>
       </nav>
     </header>
-    <main data-art-role="default" aria-label="<%= @section.capitalize %>"></main>
-    <footer data-art-role="bottom">© 2026 Jim Harvey · Continuum v<%= Rails.application.config.x.version %></footer>
+    <main id="main-content" tabindex="-1" data-art-role="default" aria-label="<%= @section.capitalize %>"></main>
+    <footer data-art-role="bottom"><span>© <%= Date.current.year %> <%= link_to "Jim Harvey", "https://harvj.com" %></span>
+      <span class="release-version">Continuum v<%= Rails.application.config.x.version %></span></footer>
   </body>
 </html>

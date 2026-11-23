@@ -35,13 +35,63 @@ class LandingTest < ActionDispatch::IntegrationTest
       assert_select "main", text: ""
       assert_select "main *", count: 0
       assert_select 'link[rel=icon][type="image/svg+xml"][sizes=any][href="/favicon/neutral.svg"]', count: 1
-      assert_select "footer", text: "© 2026 Jim Harvey · Continuum v#{ContinuumVersion.read}"
+      assert_select "footer", text: "© #{Date.current.year} Jim Harvey Continuum v#{ContinuumVersion.read}"
     end
     get "/up"
     assert_response :success
     host! "elsewhere.example"
     get "/"
     assert_response :forbidden
+  end
+
+  test "the footer rolls over the calendar year while keeping the running version" do
+    version = Rails.application.config.x.version
+    travel_to Time.utc(2027, 1, 1, 12) do
+      LandingController::SECTIONS.each do |section|
+        host! "#{section}.harvj.com"
+        get "/"
+        assert_response :success
+        assert_select "footer", text: "© 2027 Jim Harvey Continuum v#{version}"
+        assert_select "footer a[href='https://harvj.com']", text: "Jim Harvey"
+      end
+    end
+  end
+
+  test "only Network exposes appearance and only for a complete verified pair" do
+    light = svg_record("ivory").merge("foreground" => "dark")
+    dark = svg_record("navy").merge("foreground" => "light")
+    records = { "continuum.network_background_light" => light, "continuum.network_background_dark" => dark }
+
+    [nil, "continuum.network_background_light", "continuum.network_background_dark"].each do |id|
+      assert_manifest(id ? records.slice(id) : {})
+      @time += 30
+      get "/"
+      assert_select ".appearance, template[data-art-mode]", count: 0
+      assert_select "img.background", count: (id ? 1 : 0)
+    end
+
+    assert_manifest(records)
+    @time += 30
+    get "/"
+    assert_select ".appearance summary[aria-label='Appearance settings']", count: 1
+    records.each do |id, record|
+      mode = id.split("_").last
+      url = "/background/#{record.fetch("sha256")}"
+      assert_select "template[data-art-mode=#{mode}] img[src='#{url}'][data-art-legacy=#{record.fetch("foreground")}]"
+    end
+    records.each_value do |record|
+      get "/background/#{record.fetch("sha256")}"
+      assert_response :success
+      assert_equal record.fetch("sha256"), Digest::SHA256.hexdigest(response.body)
+    end
+
+    %w[library intelligence].each do |section|
+      host! "#{section}.harvj.com"
+      get "/"
+      assert_select ".appearance, template[data-art-mode]", count: 0
+      get "/background/#{light.fetch("sha256")}"
+      assert_response :not_found
+    end
   end
 
   test "publication update failure rollback and removal" do
