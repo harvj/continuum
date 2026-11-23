@@ -115,9 +115,11 @@ Network features, before launching any protected workflows.
    authenticated acceptance/publication receipts and same-process footer
    refresh. Rehearse failure retention and rollback before replacing the
    existing production version path.
-3. Agree on client registration, canonical hosts and callbacks with Auth.
-   Implement the approved OIDC login, local authenticated session, logout
-   and invalidation only when the protected workflows have defined needs.
+3. Finish Auth registration and requester mapping for the three production
+   hosts. The [local Auth candidate](qualification/CONTINUUM_AUTH_PRODUCTION_GATES.md)
+   implements deliberate OIDC entry, host-local sessions, logout and
+   invalidation. Run real browser journeys from the approved Auth entry and
+   obtain the signed anonymous-header disposition before releasing.
 4. Retain verified subject and username with the local session. Fetch fresh
    session-bound grants independently for protected navigation. Exercise
    outages, expiry, delayed responses, restoration, replacement and real

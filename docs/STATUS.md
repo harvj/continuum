@@ -1,5 +1,14 @@
 # Continuum status
 
+## Continuum Auth integration candidate
+
+The local v0.2.0 candidate adds host-local OIDC sessions and a signed-registry
+consumer. Anonymous landing pages retain their three public navigation links.
+Local HTTPS browser and PostgreSQL tests passed. Signed preflight is blocked
+on scoped navigation and text decisions, real Auth registrations and journeys,
+and production registry refresh verification. See the
+[Auth production gate record](qualification/CONTINUUM_AUTH_PRODUCTION_GATES.md).
+
 ## v0.2.0 release candidate
 
 The candidate adds a two-tone focus indicator to the Intelligence footer
