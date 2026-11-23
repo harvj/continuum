@@ -41,6 +41,12 @@ canonical client with the catalogue name and public URL. The Library
 client has the audited provisioning name and an unset public URL.
 Auth owns reconciling this metadata while preserving the existing
 credential, client identity and provisioning retry behavior.
+Auth prepared exact local candidate
+`9a7b72ad0015a751e35b15b7531be45dbe209aa1` for a protected
+catalogue binding and reported 205 passing specs. Automatic approval
+review rejected the requested Auth branch push and draft PR because
+the reconciliation requires separate explicit authorization in that
+workflow. The candidate is local and the deployed mapping is unchanged.
 The public Continuum host routes still return
 404 for `/login`; public roots and both health endpoints return 200.
 
