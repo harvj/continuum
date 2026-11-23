@@ -1,5 +1,14 @@
 # Continuum status
 
+## v0.2.0 selected v2 qualification
+
+Reconciled the exact local release branch with remote operations guidance.
+The merged selector verified signed v2.0.0 while preserving the global
+v1.3.0 minimum, and Continuum can read the commissioned registry cache.
+The release remains blocked on independent Auth security review and
+signed v2 scopes for the approved anonymous entry and footer text.
+See the [v2 coordination record](qualification/CONTINUUM_V0.2.0_V2_COORDINATION.md).
+
 ## SH-07 exact-artifact release identity
 
 The local candidate verifies signed launch bindings, numbered release
