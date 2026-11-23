@@ -74,7 +74,15 @@ separately. Site Art backs up its own publication tree.
 
 For application rollback, switch `current` to the prior verified release,
 restart only `continuum.service`, and recheck both probes and all three hosts.
-This release has no application migrations. For first-release withdrawal,
+For v0.2.0, rehearse the additive authentication migration against a
+disposable database before authorization. Apply it to Continuum's database
+under the approved migration procedure before enabling Auth registrations.
+Retain the tables on application rollback to v0.1.2. Coordinate with Auth
+before rollback to withdraw or repoint any entry that would target a
+route absent from the restored release. The verifier keeps its durable
+registry trust and cache state across application rollback.
+
+For first-release withdrawal,
 the infrastructure operator removes only Continuum's registration using
 the shared lock and validation process, then stops the Continuum unit.
 Preserve its database, media, release history and other routes. Artwork
