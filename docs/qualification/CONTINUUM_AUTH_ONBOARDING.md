@@ -35,7 +35,13 @@ exact callbacks above and approved production `password_sufficient`
 profiles for the same sole verified owner. Auth verified the three
 root-owned mode-0600 handoffs by metadata. Credential values stay on the
 protected host. Auth's canonical `continuum` mapping and two requester
-aliases are still absent. The public Continuum host routes still return
+aliases are still absent. The deployed Auth
+`ApplicationCatalogue.validate_registrations!` requires a reviewed
+canonical client with the catalogue name and public URL. The Library
+client has the audited provisioning name and an unset public URL.
+Auth owns reconciling this metadata while preserving the existing
+credential, client identity and provisioning retry behavior.
+The public Continuum host routes still return
 404 for `/login`; public roots and both health endpoints return 200.
 
 The trusted selector verified Shell `--version 2.1.0 --adopted-version 2.0.0`
@@ -47,6 +53,9 @@ with the verified fixture inputs. Infrastructure verified the proposed
 loopback ports, existing certificate coverage and in-place readability,
 and the read-only registry projection. The isolated guarded preview
 still requires an authorized launch and an owner browser session.
+SH-07 passed the permitted isolated release identity vectors. Live
+receipt promotion also requires the release store and authorized signer
+roles described in [versioning](../VERSIONING.md).
 
 ## Earlier assurance investigation
 
