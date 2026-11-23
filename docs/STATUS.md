@@ -2,10 +2,10 @@
 
 ## Continuum confidential-client onboarding
 
-Signed v2.1 and Auth grouped-requester support are live. The owner chose
-owner-only membership and password-sufficient assurance for all three
-Continuum hosts. Current Auth policy still challenges enrolled accounts
-and the live login routes remain inactive. See the
+Signed Shell v2.1 and the Auth password-sufficient policy are live.
+Auth verified all three protected owner-only registrations and their
+credential handoffs. Canonical requester mapping and real White Sands
+qualification remain open. Public login routes remain inactive on v0.1.2. See the
 [onboarding record](qualification/CONTINUUM_AUTH_ONBOARDING.md).
 
 ## v0.2.0 owner-assurance resolution

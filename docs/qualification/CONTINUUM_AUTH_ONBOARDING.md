@@ -1,6 +1,6 @@
 # Continuum confidential-client onboarding
 
-**Disposition (2026-11-23) — routes and registrations remain inactive.**
+**Disposition (2026-11-23) — protected registrations verified, activation held.**
 The held release is
 `079fdcc83536390b075e8bf722c9d97d5fece8b2`, archive SHA-256
 `967b204ed0a9e3d6bf388ae54198b792a17eebecc18799bee4f5ce46764e885e`.
@@ -27,9 +27,30 @@ by the eventual approved issuer policy. An exact `required_acr` pin to
 password would reject an MFA-authenticated result. Keep Auth's
 administrator TOTP requirement and existing clients intact.
 
-## Live verification and blocker
+## Live verification
 
-- Auth v0.5.0 is live at
+Auth v0.5.0 at `3e39e9bc8236b48150137d2ed953cf65f31cef3d`
+has three distinct, enabled confidential OpenID registrations with the
+exact callbacks above and approved production `password_sufficient`
+profiles for the same sole verified owner. Auth verified the three
+root-owned mode-0600 handoffs by metadata. Credential values stay on the
+protected host. Auth's canonical `continuum` mapping and two requester
+aliases are still absent. The public Continuum host routes still return
+404 for `/login`; public roots and both health endpoints return 200.
+
+The trusted selector verified Shell `--version 2.1.0 --adopted-version 2.0.0`
+for the exact held artifact and retained the global v1.3.0 baseline.
+CT-02 passed. CT-01 and SH-02/03/04/05/06/10 still require actual
+White Sands journeys and grant evidence on the exact artifact. The
+held candidate passed 26 Rails tests and 697 assertions against PostgreSQL
+with the verified fixture inputs. Infrastructure verified the proposed
+loopback ports, existing certificate coverage and in-place readability,
+and the read-only registry projection. The isolated guarded preview
+still requires an authorized launch and an owner browser session.
+
+## Earlier assurance investigation
+
+- At the earlier checkpoint Auth v0.5.0 was live at
   `36f2a27e4ddfee482734da80b1303aface1ef71c` with grouped requester
   support. Auth verified that none of the three callbacks, protected
   provisioning profiles, or canonical/requester mappings exists yet.
