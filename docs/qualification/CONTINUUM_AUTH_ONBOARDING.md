@@ -54,6 +54,16 @@ promotion, failure retention and rollback. The audit remained incomplete
 for the other cases because its adapter ran SH-07 only. The production
 preflight remains the activation gate.
 
+Infrastructure passed a disposable target-host isolation rehearsal.
+Caddy could connect to the preview Unix socket, an unrelated UID was
+denied, both production PostgreSQL paths were blocked, and canonical
+Auth and Site Art TLS worked. The rehearsal left no running listeners.
+Infrastructure then staged and rehashed the exact candidate under a
+private run directory. The preview process has not started. Automatic
+approval review rejected creating the two dedicated no-login host
+identities and staging temporary root-only Auth, session and ingress
+material pending explicit authorization for those operations.
+
 ### Registration-only checkpoint
 
 Auth v0.5.0 at `3e39e9bc8236b48150137d2ed953cf65f31cef3d`
