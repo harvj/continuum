@@ -5,8 +5,10 @@
 Signed Shell v2.1 and the Auth password-sufficient policy are live.
 Auth verified all three protected owner-only registrations and their
 credential handoffs, then deployed the canonical binding and requester
-mappings. White Sands browser qualification awaits the isolated preview.
-Public login routes remain inactive on v0.1.2. See the
+mappings. The isolated preview passed password-only sign-in on all three
+hosts and exposed a provider revocation failure. The replacement passed
+local and hosted CI and requires fresh live evidence and a signed exact
+footer disposition. Public login routes remain inactive on v0.1.2. See the
 [onboarding record](qualification/CONTINUUM_AUTH_ONBOARDING.md).
 
 ## v0.2.0 owner-assurance resolution

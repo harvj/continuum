@@ -29,6 +29,37 @@ administrator TOTP requirement and existing clients intact.
 
 ## Live verification
 
+The first real White Sands preview completed on archive `967b204e…885e`.
+The owner password-authenticated through Network and reused the Auth
+session for Library and Intelligence. Each app remained anonymous until
+its deliberate local entry, then showed the verified username and three
+fresh destinations. Auth observed one password-assurance exchange per
+host and zero MFA or refresh exchanges. All three host-local CSRF logout
+forms returned the browser to anonymous, with sibling sessions surviving.
+Auth recorded zero grant revocations. The signed v2.1.0 preflight passed
+CT-01 and retained SH-03, SH-05, SH-06 and SH-10 as failed. Auth reproduced
+the cause on its deployed revision with disposable credentials. The
+form revocation request gets HTTP 403. Auth's JSON back channel revokes
+the same confidential-client access grant.
+
+The replacement candidate
+`ca3169246d3c94725124a4553d602ae809948586` uses JSON for revocation
+and keeps introspection form-encoded. Archive SHA-256 is
+`d8f7a8dd50f265733e3dcb536b45b59ad6ae3076f5b51016ede15312e4d4d21e`.
+It passed 27 Rails tests and 702 assertions with PostgreSQL and verified
+fixture inputs, including the new transport regression.
+[Hosted exact-SHA CI](https://github.com/harvj/continuum/actions/runs/45308903335)
+also passed. Exact Rails anonymous renders and 20 ordinary/fallback
+footer captures matched the original, and forced-colors and focus checks
+passed. Signed v2.1.0 CT-02 still names the earlier source and archive.
+Infrastructure prepared a forward, unsigned v2.2 rebind for review.
+Repeat the guarded real journeys and provider revocation on the replacement
+and publish its exact signed disposition before authorizing activation.
+The original preview and local browser profile were removed. Production
+remains at v0.1.2.
+
+### Auth production handoff
+
 Auth v0.5.0 at `3d13a0d565721d16632a7c068ac85594c002021a`
 supersedes the registration-only checkpoint below. Its installed signed
 v1.3.0 Auth preflight and hosted exact-head CI passed. The protected
