@@ -62,7 +62,13 @@ Infrastructure then staged and rehashed the exact candidate under a
 private run directory. The preview process has not started. Automatic
 approval review rejected creating the two dedicated no-login host
 identities and staging temporary root-only Auth, session and ingress
-material pending explicit authorization for those operations.
+material pending explicit authorization for those operations. The owner
+subsequently authorized the Infrastructure and Continuum teams to run the
+preview. Infrastructure started a timed isolated instance, and Continuum
+verified the exact archive marker and anonymous landing via canonical TLS
+in a disposable browser profile on all three hosts. The Auth observer
+recorded a zero-grant baseline for the run. Real authentication requires
+direct owner interaction in that browser.
 
 ### Registration-only checkpoint
 
