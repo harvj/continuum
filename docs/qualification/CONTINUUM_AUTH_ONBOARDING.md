@@ -46,6 +46,14 @@ identity, launcher, isolated fixture database or running ingress at the
 reviewed loopback ports. The current work is to validate a runnable
 isolated preview and then observe the three real journeys.
 
+[Hosted Continuum CI](https://github.com/harvj/continuum/actions/runs/45304821639)
+passed on the exact candidate via a verification-only branch. The
+signed v2.1.0 Shell CI audit passed SH-07 with 3 tests and 191 assertions
+covering the immutable release identity, verified receipts, same-process
+promotion, failure retention and rollback. The audit remained incomplete
+for the other cases because its adapter ran SH-07 only. The production
+preflight remains the activation gate.
+
 ### Registration-only checkpoint
 
 Auth v0.5.0 at `3e39e9bc8236b48150137d2ed953cf65f31cef3d`
