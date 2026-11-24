@@ -1,5 +1,15 @@
 # Continuum status
 
+## v0.2.1 navigation release
+
+Continuum v0.2.1 is deployed on Network, Library and Intelligence at
+`1181843635418eff0fc4f06a17097fdf5527e033`. The exact archive, hosted CI,
+signed Shell v2.4.0 preflight and public desktop/mobile browser checks
+passed. Production Auth configuration, active registry and database
+schema match v0.2.0. The v0.2.0 release remains available for rollback.
+See the [exact visual evidence](design/navigation/rc-1/README.md) and
+[published release](https://github.com/harvj/continuum/releases/tag/v0.2.1).
+
 ## v0.2.0 unified Continuum sign-in
 
 Exact candidate `3de4a58d7de5d2090ba6a81ea5b6813454bb44b2`
