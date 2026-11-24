@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] = "test"
 require_relative "../config/environment"
 require "rails/test_help"
+require "minitest/mock"
 
 class ContinuumAuthTest < ActiveSupport::TestCase
   self.use_transactional_tests = false
@@ -38,6 +39,26 @@ class ContinuumAuthTest < ActiveSupport::TestCase
     travel_to Time.at(now + 60) do
       assert_nil @auth.evidence(grant, subject: "verified-subject")
     end
+  end
+
+  test "client revokes an access grant through Auth's JSON back channel" do
+    @auth.define_singleton_method(:discovery_endpoint) { |_field, _fallback| "https://auth.harvj.com/revoke" }
+    http = Net::HTTP.new("auth.harvj.com", 443)
+    http.define_singleton_method(:request) do |request|
+      @revocation_request = request
+      Net::HTTPOK.new("1.1", "200", "OK").tap do |response|
+        response.define_singleton_method(:body) { "{}" }
+      end
+    end
+
+    Net::HTTP.stub(:new, http) { @auth.revoke("opaque-test-grant") }
+
+    request = http.instance_variable_get(:@revocation_request)
+    assert_equal "/revoke", request.path
+    assert_equal "application/json", request["Accept"]
+    assert_equal "application/json", request["Content-Type"]
+    assert_equal "Basic #{Base64.strict_encode64('client:test-only')}", request["Authorization"]
+    assert_equal({ "token" => "opaque-test-grant", "token_type_hint" => "access_token" }, JSON.parse(request.body))
   end
 
   test "client verifies a signed ID token before returning an opaque token and local deadline" do

@@ -105,7 +105,12 @@ class ContinuumAuth
   end
 
   def revoke(grant)
-    post_form(discovery_endpoint("revocation_endpoint", "/revoke"), token: grant, token_type_hint: "access_token")
+    post(discovery_endpoint("revocation_endpoint", "/revoke")) do |request|
+      # Auth distinguishes confidential JSON revocation from its browser form.
+      request["Accept"] = "application/json"
+      request["Content-Type"] = "application/json"
+      request.body = JSON.generate(token: grant, token_type_hint: "access_token")
+    end
   end
 
   private
@@ -122,6 +127,10 @@ class ContinuumAuth
   end
 
   def post_form(endpoint, form)
+    post(endpoint) { |request| request.set_form_data(form) }
+  end
+
+  def post(endpoint)
     with_provider do
       uri = URI(endpoint)
       http = Net::HTTP.new(uri.host, uri.port, nil)
@@ -131,7 +140,7 @@ class ContinuumAuth
       http.write_timeout = 2
       request = Net::HTTP::Post.new(uri)
       request.basic_auth(@registration.id, @registration.secret)
-      request.set_form_data(form)
+      yield request
       response = http.request(request)
       raise Unavailable unless response.is_a?(Net::HTTPSuccess)
 
