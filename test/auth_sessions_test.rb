@@ -73,8 +73,10 @@ if ENV["CONTINUUM_TEST_POSTGRES"] == "1"
       FileUtils.remove_entry(@root)
     end
 
-    test "all public hosts have deliberate host-local entry and no rendering-time login" do
+    test "all public hosts remain anonymous until deliberate unified sign-in" do
       @providers.each_key do |host|
+        reset!
+        https!
         host! host
         get "/"
         assert_response :ok
@@ -103,7 +105,7 @@ if ENV["CONTINUUM_TEST_POSTGRES"] == "1"
       assert_response :bad_request
       host! "network.harvj.com"
       callback(state)
-      assert_response :see_other
+      assert_response :ok
       callback(state)
       assert_response :bad_request
       assert_equal 1, @providers.fetch("network.harvj.com").calls
@@ -188,12 +190,91 @@ if ENV["CONTINUUM_TEST_POSTGRES"] == "1"
       assert_select ".shell-session", count: 0
     end
 
+    test "one origin exchange establishes distinct host-only handles and one logout revokes the originating grant" do
+      write_registry(1, %w[muzeum continuum-engine continuum])
+      sign_in
+      record = ContinuumSession.sole
+      assert record.active?
+      assert_equal 2, record.continuum_session_handles.count
+      assert_equal 3, ([record.token_digest] + record.continuum_session_handles.pluck(:token_digest)).uniq.length
+      @providers.each_key do |host|
+        host! host
+        get "/"
+        assert_response :ok
+        assert_select ".shell-session-name", text: "jim"
+        destinations(record.shell_context)
+        assert_equal %w[muzeum continuum-engine], response.parsed_body.fetch("destinations").pluck("id")
+      end
+      assert_equal [1, 0, 0], %w[network library intelligence].map { |section| @providers.fetch("#{section}.harvj.com").calls }
+
+      get "/"
+      token = css_select("form[action='/logout'] input[name='authenticity_token']").sole["value"]
+      post "/logout", params: { authenticity_token: token }, headers: { "Origin" => "https://auth.harvj.com" }
+      assert_response :unprocessable_content
+      assert ContinuumSession.exists?(record.id)
+      post "/logout", params: { authenticity_token: token }, headers: { "Origin" => "https://#{request.host}" }
+      assert_response :see_other
+      assert_equal "grant", @providers.fetch("network.harvj.com").revoked
+      assert_nil @providers.fetch("intelligence.harvj.com").revoked
+      assert_empty ContinuumSessionHandle.all
+      destinations(record.shell_context)
+      assert_response :unauthorized
+      @providers.each_key do |host|
+        host! host
+        get "/"
+        assert_select ".shell-session", count: 0
+      end
+    end
+
+    test "bootstrap rejects unrelated origins, wrong host, replay and stale tickets" do
+      callback(begin_login)
+      target, ticket = bootstrap_form
+      other = (@providers.keys - [request.host, target]).sole
+      host! other
+      post "/auth/session", params: { ticket: }, headers: { "Origin" => "https://network.harvj.com" }
+      assert_response :bad_request
+
+      thief = open_session
+      thief.https!
+      thief.host! target
+      thief.post "/auth/session", params: { ticket: }, headers: { "Origin" => "https://network.harvj.com" }
+      assert_equal 400, thief.response.status
+
+      host! target
+      post "/auth/session", params: { ticket: }, headers: { "Origin" => "https://auth.harvj.com" }
+      assert_response :bad_request
+      post "/auth/session", params: { ticket: "f" * 64 }, headers: { "Origin" => "https://network.harvj.com" }
+      assert_response :bad_request
+      post "/auth/session", params: { ticket: }, headers: { "Origin" => "https://network.harvj.com" }
+      assert_response :ok
+      next_target, next_ticket = bootstrap_form
+      post "/auth/session", params: { ticket: }, headers: { "Origin" => "https://network.harvj.com" }
+      assert_response :bad_request
+      ContinuumSessionHandle.where(host: next_target).update_all(ticket_expires_at: 1.second.ago)
+      host! next_target
+      post "/auth/session", params: { ticket: next_ticket }, headers: { "Origin" => "https://#{target}" }
+      assert_response :bad_request
+      refute ContinuumSession.sole.active?
+    end
+
     private
 
     def begin_login
       get "/login"
-      assert_response :redirect
+      assert_response :ok
       assert_includes Array(response.headers["Set-Cookie"]).join("\n"), "secure"
+      2.times do
+        source = request.host
+        target, ticket = bootstrap_form
+        host! target
+        post "/auth/session/prepare", params: { ticket: }, headers: { "Origin" => "https://#{source}" }
+        receiver = Array(response.headers["Set-Cookie"]).join("\n")
+        assert_includes receiver, "__Host-continuum-receiver="
+        refute_match(/domain=/i, receiver)
+      end
+      assert_response :ok
+      get css_select("a").sole["href"]
+      assert_response :redirect
       assert_includes response.location, "redirect_uri=#{CGI.escape("https://#{request.host}/auth/callback")}"
       URI.decode_www_form(URI(response.location).query).to_h.fetch("state")
     end
@@ -203,9 +284,34 @@ if ENV["CONTINUUM_TEST_POSTGRES"] == "1"
     end
 
     def sign_in
-      callback(begin_login)
-      assert_response :see_other
-      assert_includes Array(response.headers["Set-Cookie"]).join("\n"), "__Host-continuum-session="
+      state = begin_login
+      origin = request.host
+      callback(state)
+      assert_response :ok
+      refute ContinuumSession.order(:id).last.active?
+      2.times { follow_session_bootstrap }
+      assert_response :ok
+      assert_equal "https://#{origin}/", css_select("a").sole["href"]
+      host! origin
+    end
+
+    def bootstrap_form
+      action = URI(css_select("form").sole["action"])
+      ticket = css_select('input[name="ticket"]').sole["value"]
+      [action.host, ticket]
+    end
+
+    def follow_session_bootstrap
+      source = request.host
+      target, ticket = bootstrap_form
+      assert_includes response.headers["Content-Security-Policy"], "form-action https://#{target}"
+      assert_equal "no-store", response.headers["Cache-Control"].split(",").first
+      host! target
+      post "/auth/session", params: { ticket: }, headers: { "Origin" => "https://#{source}" }
+      cookies_written = Array(response.headers["Set-Cookie"]).join("\n")
+      assert_includes cookies_written, "__Host-continuum-session="
+      assert_includes cookies_written, "secure"
+      refute_match(/domain=/i, cookies_written)
     end
 
     def destinations(context)

@@ -4,7 +4,7 @@ class ContinuumOidcAttempt < ActiveRecord::Base
       attempt = lock.find_by(state:, host:, client_id:, browser_digest:)
       if attempt
         attempt.destroy!
-        attempt if attempt.expires_at.future?
+        attempt if attempt.started? && attempt.expires_at.future?
       end
     end
   end

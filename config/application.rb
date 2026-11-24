@@ -22,7 +22,7 @@ module Continuum
     config.active_storage.service = :local
     config.active_storage.draw_routes = false
     config.public_file_server.enabled = true
-    config.filter_parameters += %i[code state nonce verifier grant token client_secret]
+    config.filter_parameters += %i[code state nonce verifier grant token ticket client_secret]
     config.session_store :cookie_store, key: "__Host-continuum-csrf", secure: true, httponly: true, same_site: :lax, path: "/"
     config.x.site_art_root = ENV.fetch("SITE_ART_ROOT", "/var/www/site-art/public")
     config.content_security_policy do |policy|

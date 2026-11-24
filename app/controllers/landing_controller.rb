@@ -13,7 +13,7 @@ class LandingController < ActionController::Base
     config = Rails.application.config.x
     @release_label = config.release_identity&.label || "v#{config.version}"
     @auth_session = resolve_session
-    @auth_registration = auth_registration if @auth_session
+    @auth_registration = session_registration(@auth_session) if @auth_session
     snapshot = artwork.snapshot
     @background = snapshot[artwork_id("background")]
     variants = network_variants(snapshot)

@@ -3,6 +3,7 @@ require "net/http"
 require "timeout"
 
 class ContinuumAuth
+  HOSTS = %w[network.harvj.com library.harvj.com intelligence.harvj.com].freeze
   ISSUER = "https://auth.harvj.com".freeze
   USERNAME = /\A[a-z0-9][a-z0-9_-]{0,31}\z/
   DESTINATION = /\A[a-z0-9]+(?:-[a-z0-9]+)*\z/
@@ -27,7 +28,7 @@ class ContinuumAuth
     raise ArgumentError, "Invalid Continuum Auth registrations" unless data.is_a?(Hash)
 
     data.each_with_object({}) do |(host, entry), result|
-      unless host.in?(%w[network.harvj.com library.harvj.com intelligence.harvj.com]) &&
+      unless HOSTS.include?(host) &&
         entry.is_a?(Hash) && entry["client_id"].is_a?(String) && entry["client_id"].present? &&
         entry["client_secret"].is_a?(String) && entry["client_secret"].present? &&
         (entry["required_acr"].nil? || entry["required_acr"].is_a?(String))
@@ -105,7 +106,12 @@ class ContinuumAuth
   end
 
   def revoke(grant)
-    post_form(discovery_endpoint("revocation_endpoint", "/revoke"), token: grant, token_type_hint: "access_token")
+    post(discovery_endpoint("revocation_endpoint", "/revoke")) do |request|
+      # Auth distinguishes confidential JSON revocation from its browser form.
+      request["Accept"] = "application/json"
+      request["Content-Type"] = "application/json"
+      request.body = JSON.generate(token: grant, token_type_hint: "access_token")
+    end
   end
 
   private
@@ -122,6 +128,10 @@ class ContinuumAuth
   end
 
   def post_form(endpoint, form)
+    post(endpoint) { |request| request.set_form_data(form) }
+  end
+
+  def post(endpoint)
     with_provider do
       uri = URI(endpoint)
       http = Net::HTTP.new(uri.host, uri.port, nil)
@@ -131,7 +141,7 @@ class ContinuumAuth
       http.write_timeout = 2
       request = Net::HTTP::Post.new(uri)
       request.basic_auth(@registration.id, @registration.secret)
-      request.set_form_data(form)
+      yield request
       response = http.request(request)
       raise Unavailable unless response.is_a?(Net::HTTPSuccess)
 
