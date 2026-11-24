@@ -35,11 +35,15 @@ if ENV["SHELL_QUALIFICATION_INPUTS"]
           host! "#{section}.harvj.com"
           get "/"
           assert_response :success
-          assert_select "nav a[href='#{library.fetch('canonical_url')}']", text: library.fetch("name")
+          if section == "library"
+            assert_select "nav .primary-nav-links > span[aria-current=page]", text: library.fetch("name")
+          else
+            assert_select "nav a[href='#{library.fetch('canonical_url')}']", text: library.fetch("name")
+          end
           registry.reject { |entry| entry == library }.each do |entry|
             assert_select "header a[href='#{entry.fetch('canonical_url')}']", count: 0
           end
-          assert_select "header a[href='/login'], header details, header button", count: 0
+          assert_select "header a[href='/login'], header details", count: 0
           assert_select "footer a[href='#{credit_url}']", text: credit
           assert_select "footer .release-version", text: "Continuum v#{ContinuumVersion.read}"
         end

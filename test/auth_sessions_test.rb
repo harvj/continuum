@@ -80,7 +80,8 @@ if ENV["CONTINUUM_TEST_POSTGRES"] == "1"
         host! host
         get "/"
         assert_response :ok
-        assert_select "nav a", count: 3
+        assert_select "nav a", count: 2
+        assert_select "nav .primary-nav-links > span[aria-current=page]", count: 1
         assert_select "header a[href='/login'], header [aria-label=Home], header details", count: 0
         get "/login", headers: { "Sec-Purpose" => "prefetch" }
         assert_response :no_content

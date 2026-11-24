@@ -13,6 +13,7 @@
       <% end %>
     <% end %>
     <link rel="stylesheet" href="/continuum.css">
+    <script src="/primary-navigation.js" defer></script>
     <% if @auth_session %>
       <link rel="stylesheet" href="/shell-session.css">
       <script src="/shell-session.js" defer></script>
@@ -47,9 +48,19 @@
     <header data-art-role="top">
       <a class="wordmark" href="https://harvj.com">harvj.</a>
       <nav aria-label="Primary">
-        <% LandingController::SECTIONS.each do |section| %>
-          <%= link_to section.capitalize, "https://#{section}.harvj.com/", aria: { current: ("page" if @section == section) } %>
-        <% end %>
+        <button class="primary-nav-toggle" type="button" aria-label="Toggle primary navigation"
+          aria-expanded="false" aria-controls="primary-nav-links">
+          <span aria-hidden="true"></span>
+        </button>
+        <div class="primary-nav-links" id="primary-nav-links">
+          <% LandingController::SECTIONS.each do |section| %>
+            <% if @section == section %>
+              <span aria-current="page"><%= section.capitalize %></span>
+            <% else %>
+              <%= link_to section.capitalize, "https://#{section}.harvj.com/" %>
+            <% end %>
+          <% end %>
+        </div>
       </nav>
       <% if @auth_session %>
         <%= render "session_dropdown", auth_session: @auth_session, registration: @auth_registration %>

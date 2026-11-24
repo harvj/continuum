@@ -27,10 +27,14 @@ class LandingTest < ActionDispatch::IntegrationTest
       get "/"
       assert_response :success
       assert_select "header .wordmark[href='https://harvj.com']", text: "harvj."
-      assert_select "nav a" do |links|
-        assert_equal %w[Network Library Intelligence], links.map(&:text)
+      assert_select "nav .primary-nav-links > *" do |items|
+        assert_equal %w[Network Library Intelligence], items.map(&:text)
       end
-      assert_select "nav a[aria-current=page]", count: 1, text: section.capitalize
+      assert_select "nav .primary-nav-links > span[aria-current=page]", count: 1, text: section.capitalize
+      assert_select "nav a" do |links|
+        assert_equal (LandingController::SECTIONS - [section]).map { |name| "https://#{name}.harvj.com/" },
+          links.map { |link| link["href"] }
+      end
       assert_select "main", text: ""
       assert_select "main *", count: 0
       assert_select 'link[rel=icon][type="image/svg+xml"][sizes=any][href="/favicon/neutral.svg"]', count: 1
