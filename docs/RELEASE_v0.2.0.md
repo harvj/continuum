@@ -1,26 +1,13 @@
-# v0.2.0 Public shell and Network appearance
+# Continuum v0.2.0
 
-Network can follow the visitor's system appearance or use a saved Light or
-Dark choice. The control is available when both approved Network backgrounds
-are verified. Continuum switches the picture and its text treatment together
-and retains the last displayed treatment if a replacement cannot decode.
-Library and Intelligence each have a single approved background.
+Continuum v0.2.0 gives Network, Library, and Intelligence one shared sign-in. Start on any host through White Sands, then move among all three directly. The verified username and currently authorized application destinations follow the same Continuum session. Signing out on any host ends that session everywhere and revokes its originating Auth grant.
 
-The three public landing pages remain anonymously accessible. The layout
-adds a skip link, adjusts header spacing for narrow screens, and gives the
-footer credit and release label room to wrap. The credit links to
-`https://harvj.com/` and the copyright follows the current calendar year.
-Intelligence uses a two-tone keyboard focus indicator on the credit link
-while retaining the existing unfocused footer presentation.
+All three landing pages remain publicly accessible. Each host keeps its own browser cookie, so Continuum’s session cookie is never sent to other harvj.com applications. The three existing Auth callback registrations remain in use. Auth administrator MFA is unchanged.
 
-Anonymous navigation shows only the wordmark and the three public sections.
-When the production Auth registrations are enabled, deliberate entry from
-White Sands can establish a host-local Continuum session. Signed-in visitors
-see their verified username and the destinations allowed by current Auth
-evidence and the signed registry.
+Network now offers System, Light, and Dark when both approved Site Art variants are available. Library and Intelligence retain their approved backgrounds and footer treatments. The credit links to Jim Harvey’s homepage, and Intelligence has a distinct two-tone focus indicator.
 
-Production releases remain subject to the signed Application Shell v1.3.0
-preflight. The [qualification report](qualification/APPLICATION_SHELL_V2.md)
-records optional v2 results separately. The release adds two authentication
-tables and retains the boot-resolved version footer. Application rollback
-can leave the additive tables in place.
+The release was qualified against the signed Continuum-specific Application Shell v2.3.0 dispositions. It passed live White Sands journeys from all three hosts, including logout from a different host. The deployment uses additive Continuum-only database migrations, with the prior application artifact retained for rollback.
+
+Deployed source: `3de4a58d7de5d2090ba6a81ea5b6813454bb44b2`
+
+Release archive SHA-256: `9a37977e17900bfa254fcc60a5720bc7c20f44569f8332f52e35db09a85d7cec`

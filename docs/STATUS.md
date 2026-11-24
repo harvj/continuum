@@ -8,11 +8,14 @@ White Sands entry and cross-host logout journeys passed on the exact
 guarded preview. The full signed Shell v2.3.0 preflight passed.
 The encrypted pre-migration backup and isolated v0.1.2 restore passed.
 Continuum v0.2.0 is active on all three public hosts. Public checks and
-neighbor comparisons passed. Production browser acceptance and GitHub
-publication are pending.
+neighbor comparisons passed. Production White Sands sign-in, direct
+sibling visits, and shared logout and Auth grant revocation passed.
+The [GitHub release](https://github.com/harvj/continuum/releases/tag/v0.2.0)
+and exact archive are published. P1.5 is complete for this release.
+P1.1 shared content and import is the next product milestone.
 See the [Auth qualification record](qualification/CONTINUUM_AUTH_ONBOARDING.md).
 
-## Continuum confidential-client onboarding
+## Confidential-client onboarding checkpoint before v0.2.0
 
 Signed Shell v2.1 and the Auth password-sufficient policy are live.
 Auth verified all three protected owner-only registrations and their

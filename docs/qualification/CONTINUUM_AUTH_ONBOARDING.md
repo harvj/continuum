@@ -1,8 +1,8 @@
 # Continuum confidential-client onboarding
 
-**Disposition (2026-11-23) — protected registrations verified, activation held.**
-The held release is
-`079fdcc83536390b075e8bf722c9d97d5fece8b2`, archive SHA-256
+**Disposition (2026-11-24 UTC) — Continuum v0.2.0 deployed and published.**
+The first protected qualification held the earlier
+`079fdcc83536390b075e8bf722c9d97d5fece8b2` archive
 `967b204ed0a9e3d6bf388ae54198b792a17eebecc18799bee4f5ce46764e885e`.
 
 ## Approved initial access
@@ -100,7 +100,20 @@ guarded login availability, Site Art, favicon and v0.2.0 footer checks.
 Neighbor service process identities and representative HTTPS responses
 matched their baseline. The backed-up prior environment and v0.1.2 tree
 remain available for rollback with the additive schema retained.
-Production browser Auth acceptance and GitHub publication are pending.
+Production browser acceptance passed over normal public DNS and TLS.
+One Network password sign-in yielded a single Auth grant and no sibling
+grants, MFA exchange or refresh. All three direct roots showed the same
+verified username and fresh destinations with distinct host-only cookies.
+Library logout cleared the shared session on all three roots and Auth
+recorded one revocation of the Network grant with zero active grants.
+No Auth or adjacent application config changed.
+
+The [GitHub v0.2.0 release](https://github.com/harvj/continuum/releases/tag/v0.2.0)
+points to the deployed SHA and provides the exact archive above. GitHub's
+reported asset SHA-256 matches, and the
+[release synchronization check](https://github.com/harvj/continuum/actions/runs/45317313723)
+passed. The live footer remains in packaged-version mode. Exact SH-07
+receipt promotion and rollback were qualified in a disposable store.
 
 ### Separate-session preview evidence
 

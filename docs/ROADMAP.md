@@ -101,38 +101,25 @@ hosts only after content, media, navigation and backup acceptance.
 
 ## P1.5 — Application Shell readiness and Auth onboarding
 
-**Recommended next Shell milestone.** Public Network, Library and Intelligence
-remain anonymously accessible. Coordinate this milestone with P1.1 content
-foundation, P1.3 navigation and the access model for editorial tools and P2.2
-Network features, before launching any protected workflows.
+**Complete for Continuum v0.2.0.** Network, Library and Intelligence
+remain publicly accessible. A deliberate White Sands sign-in through
+any one host establishes one shared Continuum session with three
+host-only browser handles. A single logout clears the session and
+revokes the grant through its originating Auth client.
 
-1. Requalify the Library and Intelligence footer text for v0.2.0 after the
-   focus-only correction. Keep the exact scope of the original text approvals
-   and retain the independent focus check. Resolve the production v1.3.0
-   applicability and contrast gates before any release. See the
-   [v0.2.0 preflight record](qualification/CONTINUUM_V0.2.0_PREFLIGHT.md).
-2. Adopt the [locally qualified SH-07 release identity](qualification/CONTINUUM_SH07_RELEASE_IDENTITY.md)
-   after reviewing production signer custody, the release store and verifier
-   installation. Preserve the packaged-version path for legacy releases.
-   Rehearse the signed workflow in the intended deployment environment.
-3. Finish Auth registration and requester mapping for the three production
-   hosts. The [local Auth candidate](qualification/CONTINUUM_AUTH_PRODUCTION_GATES.md)
-   implements deliberate OIDC entry, host-local sessions, logout and
-   invalidation. Run real browser journeys from the approved Auth entry and
-   obtain the signed anonymous-header disposition before releasing.
-4. Retain verified subject and username with the local session. Fetch fresh
-   session-bound grants independently for protected navigation. Exercise
-   outages, expiry, delayed responses, restoration, replacement and real
-   invalidation. Verify authorization at protected destinations as well as
-   in the application switcher.
-5. Exercise the Network appearance control on the same surface in both
-   authentication states, and retain the saved preference through login and
-   logout. Keep the control hidden on single-variant hosts. Complete signed
-   registry refresh and candidate-bound preflight evidence before requesting
-   v2 adoption.
+The Continuum-specific signed Shell v2.3.0 dispositions cover the
+unified entry and exact Library and Intelligence footer evidence.
+The global mandatory baseline remains v1.3.0. Live preview and
+production verification passed, including the verified registry,
+keyboard focus and rollback rehearsal. SH-07 receipt promotion passed
+in isolation. Live receipt custody is future operations work and the
+deployed release uses the packaged version footer.
 
-See the [v2 qualification and Auth inventory](qualification/APPLICATION_SHELL_V2.md).
-P1.1 remains the next content milestone.
+See the [qualification record](qualification/CONTINUUM_AUTH_ONBOARDING.md)
+and [published release](https://github.com/harvj/continuum/releases/tag/v0.2.0).
+P1.1 is the next product milestone. The original Intelligence tableau,
+searchable Library and Network experience remain in their numbered
+milestones.
 
 ## P2.0 — Medium/Substack migration and conversation extraction
 
