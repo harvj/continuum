@@ -86,9 +86,21 @@ The exact signed v2.3.0 preflight passed all required cases.
 Review SHA-256 is
 `2d4d0fc765956c5e5450805ef422355dabddc50f6b7722d510bcebbbf5c78314`.
 The live read-only registry matched the signed applications and order,
-at sequence 54. The remaining deployment operation starts with the
-Continuum-only pre-migration backup and isolated restore. No commissioned
-backup destination was found.
+at sequence 54.
+
+The owner authorized a one-time Continuum-only encrypted off-host backup.
+The operator verified and restored it in isolation, including all nine
+v0.1.2 landing and health probes. The exact v2.3.0 preflight passed again
+before migration and switch. The two additive authentication migrations
+ran against only the Continuum database. The approved protected
+environment and exact release were activated independently. The public
+pointer now resolves to `3de4a58d7de5d2090ba6a81ea5b6813454bb44b2`.
+All three hostnames passed HTTPS, readiness, anonymous navigation,
+guarded login availability, Site Art, favicon and v0.2.0 footer checks.
+Neighbor service process identities and representative HTTPS responses
+matched their baseline. The backed-up prior environment and v0.1.2 tree
+remain available for rollback with the additive schema retained.
+Production browser Auth acceptance and GitHub publication are pending.
 
 ### Separate-session preview evidence
 

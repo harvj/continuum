@@ -6,7 +6,10 @@ Exact candidate `3de4a58d7de5d2090ba6a81ea5b6813454bb44b2`
 uses one Rails session and individual host-only handles. All three live
 White Sands entry and cross-host logout journeys passed on the exact
 guarded preview. The full signed Shell v2.3.0 preflight passed.
-Production stays on v0.1.2 pending the pre-migration backup and restore.
+The encrypted pre-migration backup and isolated v0.1.2 restore passed.
+Continuum v0.2.0 is active on all three public hosts. Public checks and
+neighbor comparisons passed. Production browser acceptance and GitHub
+publication are pending.
 See the [Auth qualification record](qualification/CONTINUUM_AUTH_ONBOARDING.md).
 
 ## Continuum confidential-client onboarding
