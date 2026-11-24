@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Continuum sign-in</title>
+    <script src="/continuum-session-bootstrap.js" defer></script>
+  </head>
+  <body>
+    <% if @bootstrap_return %>
+      <a href="<%= @bootstrap_return %>">Continue to Continuum</a>
+    <% else %>
+      <form action="<%= @bootstrap_target %>" method="post">
+        <input type="hidden" name="ticket" value="<%= @bootstrap_ticket %>">
+        <button type="submit">Continue signing in to Continuum</button>
+      </form>
+    <% end %>
+  </body>
+</html>

@@ -3,6 +3,7 @@ require "net/http"
 require "timeout"
 
 class ContinuumAuth
+  HOSTS = %w[network.harvj.com library.harvj.com intelligence.harvj.com].freeze
   ISSUER = "https://auth.harvj.com".freeze
   USERNAME = /\A[a-z0-9][a-z0-9_-]{0,31}\z/
   DESTINATION = /\A[a-z0-9]+(?:-[a-z0-9]+)*\z/
@@ -27,7 +28,7 @@ class ContinuumAuth
     raise ArgumentError, "Invalid Continuum Auth registrations" unless data.is_a?(Hash)
 
     data.each_with_object({}) do |(host, entry), result|
-      unless host.in?(%w[network.harvj.com library.harvj.com intelligence.harvj.com]) &&
+      unless HOSTS.include?(host) &&
         entry.is_a?(Hash) && entry["client_id"].is_a?(String) && entry["client_id"].present? &&
         entry["client_secret"].is_a?(String) && entry["client_secret"].present? &&
         (entry["required_acr"].nil? || entry["required_acr"].is_a?(String))

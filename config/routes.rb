@@ -7,6 +7,9 @@ Rails.application.routes.draw do
       root "landing#show", as: "#{section}_home"
       get "login", to: "auth_sessions#login"
       get "auth/callback", to: "auth_sessions#callback"
+      post "auth/session/prepare", to: "auth_sessions#prepare"
+      get "auth/start", to: "auth_sessions#start"
+      post "auth/session", to: "auth_sessions#bootstrap"
       get "shell/destinations", to: "auth_sessions#destinations"
       post "logout", to: "auth_sessions#destroy"
       get "favicon.ico", to: "landing#favicon_discovery", format: false
