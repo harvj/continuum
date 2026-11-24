@@ -29,6 +29,25 @@ administrator TOTP requirement and existing clients intact.
 
 ## Live verification
 
+Auth v0.5.0 at `3d13a0d565721d16632a7c068ac85594c002021a`
+supersedes the registration-only checkpoint below. Its installed signed
+v1.3.0 Auth preflight and hosted exact-head CI passed. The protected
+planner installed Library's canonical binding and three host-local
+requester mappings while preserving the registered callbacks, protected
+handoffs and owner-only, password-sufficient policy. See the
+[Auth production handoff](https://github.com/harvj/continuum/pull/1#issuecomment-7119015582).
+
+The selected signed v2.1.0 preflight on the held Continuum archive
+still exits 1 on CT-01, SH-02/03/04/05/06 and SH-10. CT-02 still passes.
+CT-01 requires an observed White Sands callback and separate host-local
+session on each of the three canonical HTTPS routes. Production remains
+on v0.1.2. Infrastructure found a preview design but no installed preview
+identity, launcher, isolated fixture database or running ingress at the
+reviewed loopback ports. The current work is to validate a runnable
+isolated preview and then observe the three real journeys.
+
+### Registration-only checkpoint
+
 Auth v0.5.0 at `3e39e9bc8236b48150137d2ed953cf65f31cef3d`
 has three distinct, enabled confidential OpenID registrations with the
 exact callbacks above and approved production `password_sufficient`
