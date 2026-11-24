@@ -29,6 +29,45 @@ administrator TOTP requirement and existing clients intact.
 
 ## Live verification
 
+### Unified candidate
+
+The owner defined one Continuum application with three public entry
+hosts and one sign-in and sign-out. Exact candidate
+`3de4a58d7de5d2090ba6a81ea5b6813454bb44b2`, archive
+`9a37977e17900bfa254fcc60a5720bc7c20f44569f8332f52e35db09a85d7cec`,
+uses one shared PostgreSQL session and separate host-only handles rather
+than a cookie sent to unrelated harvj.com applications. Pre-seeded
+receiver nonces, exact predecessor origins and short, single-use
+POST-body tickets bind the initial host handoff. Later direct roots
+load without another OIDC redirect. The originating confidential client
+owns grant evidence and revocation. No Auth registration was changed.
+
+Local PostgreSQL qualification passed 29 tests and 990 assertions.
+A disposable Brave run on the three canonical names with fixture TLS
+and a simulated provider passed initial entry from each host, two
+receiver handoffs, direct signed-in landings and shared logout.
+[Hosted CI](https://github.com/harvj/continuum/actions/runs/45312050166)
+passed on the exact SHA. The anonymous Rails output and 20 normal,
+focus and fallback captures match the earlier candidate. Appearance
+and forced-colors assertions also passed. Disposable SH-07 exercise
+confirmed exact archive identity, same-process footer promotion and
+restart retention. The deployed v0.1.2 artifact rendered all three
+landings against the additive schema in a disposable rollback rehearsal.
+
+Signed v2.1.0 preflight rejected CT-01 because it requires independent
+host-local sessions and CT-02 because it binds a different archive.
+Continuum and Infrastructure are reviewing the forward disposition in
+[Infrastructure PR #27](https://github.com/harvj/infrastructure/pull/27).
+Auth confirmed that the originating registration is the authorization
+boundary. Full Continuum withdrawal uses the existing protected
+membership and grant controls for all three registrations. Disabling
+one registration stops entry there and invalidates grants it issued.
+Real
+White Sands journeys and live originating-grant revocation on this
+candidate remain open. Production has not been changed.
+
+### Separate-session preview evidence
+
 The first real White Sands preview completed on archive `967b204e…885e`.
 The owner password-authenticated through Network and reused the Auth
 session for Library and Intelligence. Each app remained anonymous until

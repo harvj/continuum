@@ -1,5 +1,14 @@
 # Continuum status
 
+## v0.2.0 unified Continuum sign-in
+
+Exact candidate `3de4a58d7de5d2090ba6a81ea5b6813454bb44b2`
+uses one Rails session and individual host-only handles. Disposable
+canonical-host browser journeys passed from all three entry hosts.
+Signed CT-01 and CT-02 need a forward scoped disposition. The unified
+candidate has not yet run against live White Sands. Production is v0.1.2.
+See the [Auth qualification record](qualification/CONTINUUM_AUTH_ONBOARDING.md).
+
 ## Continuum confidential-client onboarding
 
 Signed Shell v2.1 and the Auth password-sufficient policy are live.
