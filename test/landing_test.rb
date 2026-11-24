@@ -35,13 +35,26 @@ class LandingTest < ActionDispatch::IntegrationTest
       assert_select "main", text: ""
       assert_select "main *", count: 0
       assert_select 'link[rel=icon][type="image/svg+xml"][sizes=any][href="/favicon/neutral.svg"]', count: 1
-      assert_select "footer", text: "© 2026 Jim Harvey · Continuum v#{ContinuumVersion.read}"
+      assert_select "footer", text: "© #{Time.current.year} Jim Harvey · Continuum v#{ContinuumVersion.read}"
     end
     get "/up"
     assert_response :success
     host! "elsewhere.example"
     get "/"
     assert_response :forbidden
+  end
+
+  test "the footer rolls over the calendar year while keeping the running version" do
+    version = Rails.application.config.x.version
+    travel_to Time.utc(2027, 1, 1, 12) do
+      LandingController::SECTIONS.each do |section|
+        host! "#{section}.harvj.com"
+        get "/"
+        assert_response :success
+        assert_select "footer", text: "© 2027 Jim Harvey · Continuum v#{version}"
+        assert_select "footer a[href='https://harvj.com']", text: "Jim Harvey"
+      end
+    end
   end
 
   test "publication update failure rollback and removal" do
