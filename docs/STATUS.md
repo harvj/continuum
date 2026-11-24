@@ -3,10 +3,10 @@
 ## v0.2.0 unified Continuum sign-in
 
 Exact candidate `3de4a58d7de5d2090ba6a81ea5b6813454bb44b2`
-uses one Rails session and individual host-only handles. Disposable
-canonical-host browser journeys passed from all three entry hosts.
-Signed CT-01 and CT-02 need a forward scoped disposition. The unified
-candidate has not yet run against live White Sands. Production is v0.1.2.
+uses one Rails session and individual host-only handles. All three live
+White Sands entry and cross-host logout journeys passed on the exact
+guarded preview. The full signed Shell v2.3.0 preflight passed.
+Production stays on v0.1.2 pending the pre-migration backup and restore.
 See the [Auth qualification record](qualification/CONTINUUM_AUTH_ONBOARDING.md).
 
 ## Continuum confidential-client onboarding

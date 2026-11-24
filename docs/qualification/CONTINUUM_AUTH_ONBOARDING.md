@@ -62,9 +62,33 @@ Auth confirmed that the originating registration is the authorization
 boundary. Full Continuum withdrawal uses the existing protected
 membership and grant controls for all three registrations. Disabling
 one registration stops entry there and invalidates grants it issued.
-Real
-White Sands journeys and live originating-grant revocation on this
-candidate remain open. Production has not been changed.
+
+The approved exact [v2.3.0 publication receipt](https://github.com/harvj/infrastructure/pull/27#issuecomment-7120300685)
+binds manifest SHA-256
+`1812f3250085b6952169700443f14fede2fa2dd0b4bd3d756b33531a330698d5`.
+The trusted selector verified it with adopted v2.0.0 and retained the
+global v1.3.0 baseline.
+
+Live unified preview `a5a1ab15de3db061b68a973faa298f32` verified
+the exact archive over normal canonical TLS on all three hosts. Starting
+from Network, Library and Intelligence respectively, the owner entered
+once and all three roots then showed the verified username and same fresh
+destinations on direct requests with no redirects. Each trial had only
+one password-assurance originating exchange and no sibling exchanges,
+MFA or refresh. The three Secure, HttpOnly host-only handles were distinct.
+Keyboard-visible identity, artwork, favicons and authenticated mobile
+layout passed. Logout on Library, Intelligence and Network respectively
+made all three roots anonymous and revoked the sole originating grant
+exactly once. The isolated units, browser, tunnel and fixture database
+were removed. Public v0.1.2 and public routes remained unchanged.
+
+The exact signed v2.3.0 preflight passed all required cases.
+Review SHA-256 is
+`2d4d0fc765956c5e5450805ef422355dabddc50f6b7722d510bcebbbf5c78314`.
+The live read-only registry matched the signed applications and order,
+at sequence 54. The remaining deployment operation starts with the
+Continuum-only pre-migration backup and isolated restore. No commissioned
+backup destination was found.
 
 ### Separate-session preview evidence
 
