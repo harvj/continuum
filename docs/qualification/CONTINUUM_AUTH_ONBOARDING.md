@@ -51,12 +51,25 @@ fixture inputs, including the new transport regression.
 [Hosted exact-SHA CI](https://github.com/harvj/continuum/actions/runs/45308903335)
 also passed. Exact Rails anonymous renders and 20 ordinary/fallback
 footer captures matched the original, and forced-colors and focus checks
-passed. Signed v2.1.0 CT-02 still names the earlier source and archive.
+passed.
+
+The exact replacement passed real provider-side revocation in isolated run
+`8c02fe4d22b9b13089a8812ab62c8952`. Auth recorded one password-assurance
+exchange and one active grant per host before logout, then one revoked
+grant, one revocation event and zero active grants per host after logout.
+Each host returned to anonymous through its own CSRF-protected form.
+Library remained signed in with fresh grants after Network logged out,
+and Intelligence remained signed in with fresh grants after Library
+logged out. No central logout was used.
+
+Signed v2.1.0 CT-02 still names the earlier source and archive.
 Infrastructure prepared a forward, unsigned v2.2 rebind for review.
-Repeat the guarded real journeys and provider revocation on the replacement
-and publish its exact signed disposition before authorizing activation.
-The original preview and local browser profile were removed. Production
-remains at v0.1.2.
+The exact signed disposition remains outstanding. The owner requested
+that Library and Intelligence display the username immediately when
+visited after signing into Network. Signed CT-01 currently requires a
+deliberate entry on each host and no silent OIDC on anonymous landings.
+Cross-host sign-in on direct landing visits needs a reviewed policy and
+Auth design before it can be qualified. Production remains at v0.1.2.
 
 ### Auth production handoff
 
