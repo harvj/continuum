@@ -1,5 +1,20 @@
 # Continuum status
 
+## v0.3.0 Intelligence content
+
+Continuum v0.3.0 is deployed at `c9d6e87d7537cadf80bd147242ede5e001d97fe0`.
+The live Intelligence reader verified a protected Auth Content v1 response
+with no published main region. The publisher returned 304 for its ETag.
+Disposable Auth and Continuum tests cover publish, edit, rename,
+withdrawal, expiry, and safe rendering. Editor changes take effect on a
+successful refresh without a Continuum deployment.
+[Visual review](design/intelligence-content/README.md) · [GitHub release](https://github.com/harvj/continuum/releases/tag/v0.3.0).
+
+Continuum adopted reusable signed Shell v2.5.0. Later releases can select
+v2.5.0 when they meet its scoped conditions and supply exact evidence
+through the existing preflight. The global minimum remains v1.3.0.
+[Published policy receipt](https://github.com/harvj/infrastructure/pull/34#issuecomment-7180961854).
+
 ## v0.2.1 navigation release
 
 Continuum v0.2.1 is deployed on Network, Library and Intelligence at
