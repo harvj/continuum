@@ -21,6 +21,42 @@ class LandingTest < ActionDispatch::IntegrationTest
     FileUtils.remove_entry(@root)
   end
 
+  test "managed Intelligence title and optional Markdown never alter routes or render executable markup" do
+    config = Rails.application.config.x
+    previous = config.intelligence_content
+    page = IntelligenceContent::Page.new("<Natural> Intelligence", "quote",
+      "> Fixture quotation.\n\n— Attribution\n\n<script>alert(1)</script>\n\n![image](https://example.org/x)\n\n[unsafe](javascript:alert\(1\))",
+      '"fixture"', 0)
+    cache = Object.new
+    cache.define_singleton_method(:current) { page }
+    config.intelligence_content = cache
+
+    host! "intelligence.harvj.com"
+    get "/"
+    assert_response :ok
+    assert_select "title", text: "<Natural> Intelligence · Continuum"
+    assert_select "nav [aria-current=page]", text: "<Natural> Intelligence"
+    assert_select "main article.intelligence-content-quote blockquote", text: "Fixture quotation."
+    assert_select "main article blockquote + p", text: "— Attribution"
+    assert_select "main article script, main article img, main article a", count: 0
+
+    page = page.with(presentation: "prose", markdown: "Edited **prose**.")
+    get "/"
+    assert_select "main article.intelligence-content-prose strong", text: "prose"
+
+    page = page.with(presentation: nil, markdown: nil)
+    get "/"
+    assert_select "main article", count: 0
+    assert_select "title", text: "<Natural> Intelligence · Continuum"
+
+    host! "library.harvj.com"
+    get "/"
+    assert_select "title", text: "Library · Continuum"
+    assert_select "main article", count: 0
+  ensure
+    config.intelligence_content = previous
+  end
+
   test "all hosts share accessible navigation with empty main and footer" do
     LandingController::SECTIONS.each do |section|
       host! "#{section}.harvj.com"

@@ -10,6 +10,8 @@ class LandingController < ActionController::Base
 
   def show
     @section = section
+    @managed_content = Rails.application.config.x.intelligence_content&.current if @section == "intelligence"
+    @page_title = @managed_content&.title || @section.capitalize
     config = Rails.application.config.x
     @release_label = config.release_identity&.label || "v#{config.version}"
     @auth_session = resolve_session
