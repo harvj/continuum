@@ -2,6 +2,7 @@
 
 require "fileutils"
 require "open3"
+require "pathname"
 require "tempfile"
 require "tmpdir"
 require_relative "../lib/continuum_release_identity"
@@ -92,6 +93,29 @@ def prepare(store, signer, source, kind)
   end
 end
 
+def qualify_promotion(store, signer, version, number)
+  Release.require!(version.match?(/\A(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\z/) &&
+    number.match?(/\A[1-9][0-9]*\z/), "Exact candidate version and number required")
+  candidate = Release.identity!(
+    Release.read(File.join(store, "candidates", version, "#{number}.json"), signer), "candidate")
+  Release.require!(candidate["target_version"] == version && candidate["candidate_number"].to_s == number,
+    "Candidate ledger identity differs")
+  checksum = candidate.fetch("artifact_sha256")
+  sha = candidate.fetch("source_sha")
+  Release.require!(Digest::SHA256.file(File.join(store, "artifacts", "#{checksum}.tar.gz")).hexdigest == checksum,
+    "Retained archive checksum mismatch")
+  checker = Pathname.new("/usr/local/libexec/harvj/release-integrity")
+  checker.ascend do |path|
+    metadata = path.lstat
+    Release.require!(metadata.uid.zero? && (metadata.mode & 0o022).zero? && !metadata.symlink?,
+      "Untrusted REL-01 checker path")
+  end
+  observed = JSON.parse(capture!(checker.to_s, "harvj/continuum", sha, checksum))
+  Release.require!(observed.values_at("result", "source_sha", "artifact_sha256") == ["pass", sha, checksum],
+    "REL-01 receipt differs from the verified Continuum artifact")
+  puts JSON.generate(observed)
+end
+
 def publish(store, signer, acceptance_path, publication_path)
   acceptance = Release.read(acceptance_path, Release.key(ENV.fetch("CONTINUUM_ACCEPTANCE_TRUST_KEY")))
   publication = Release.read(publication_path, Release.key(ENV.fetch("CONTINUUM_PUBLICATION_TRUST_KEY")))
@@ -128,9 +152,10 @@ end
 
 begin
   action, root, *arguments = ARGV
-  Release.require!(%w[prepare publish].include?(action) && root && arguments.size == 2,
+  Release.require!(%w[prepare publish qualify-promotion].include?(action) && root && arguments.size == 2,
     "Usage: bin/release-identity prepare STORE FULL_SHA development|candidate\n" \
-    "       bin/release-identity publish STORE SIGNED_ACCEPTANCE SIGNED_PUBLICATION")
+    "       bin/release-identity publish STORE SIGNED_ACCEPTANCE SIGNED_PUBLICATION\n" \
+    "       bin/release-identity qualify-promotion STORE VERSION CANDIDATE_NUMBER")
   store = File.realpath(root)
   signer = Release.key(ENV.fetch("CONTINUUM_RELEASE_SIGNING_KEY"))
   %w[artifacts candidates published releases].each { |name| FileUtils.mkdir_p(File.join(store, name)) }
@@ -138,10 +163,12 @@ begin
     lock.flock(File::LOCK_EX)
     if action == "prepare"
       prepare(store, signer, *arguments)
+    elsif action == "qualify-promotion"
+      qualify_promotion(store, signer, *arguments)
     else
       publish(store, signer, *arguments)
     end
   end
-rescue Release::Invalid, KeyError, SystemCallError, IOError, OpenSSL::PKey::PKeyError, ArgumentError => error
+rescue Release::Invalid, KeyError, SystemCallError, IOError, OpenSSL::PKey::PKeyError, ArgumentError, JSON::ParserError => error
   abort "Continuum release identity refused: #{error.message}"
 end
