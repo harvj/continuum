@@ -98,6 +98,16 @@ def verify_running(release):
             "-H", "Host: network.harvj.com", f"http://127.0.0.1:4310/{endpoint}")
 
 
+@contextlib.contextmanager
+def activation_lock():
+    fd = os.open(LOCK, os.O_CREAT | os.O_WRONLY | os.O_NOFOLLOW, 0o600)
+    with os.fdopen(fd, "a") as lock:
+        metadata = os.fstat(lock.fileno())
+        if not stat.S_ISREG(metadata.st_mode) or metadata.st_uid != 0 or metadata.st_mode & 0o022:
+            raise ValueError("Unprotected Continuum activation lock")
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        yield
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("source")
@@ -111,8 +121,7 @@ def main():
     for parent in (ROOT, release.parent):
         protected(parent)
     os.umask(0o077)
-    with LOCK.open("a") as lock:
-        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    with activation_lock():
         check_archive(args.archive, release, args.source, args.digest)
         receipt = verify_ancestry(args.source, args.digest)
         if args.check_only:
@@ -135,14 +144,15 @@ def main():
             json.dump(receipt, record)
             record.flush()
             os.fsync(record.fileno())
-        point(release)
         try:
+            point(release)
             run("systemctl", "restart", "continuum.service")
             verify_running(release)
         except (OSError, ValueError, subprocess.SubprocessError):
-            point(previous)
-            run("systemctl", "restart", "continuum.service")
-            verify_running(previous)
+            if current.resolve(strict=True) != previous:
+                point(previous)
+                run("systemctl", "restart", "continuum.service")
+                verify_running(previous)
             raise
         print(json.dumps({"result": "activated", "receipt": record.name, **{k: receipt[k] for k in (
             "source_sha", "artifact_sha256", "main_sha"
