@@ -1,0 +1,153 @@
+#!/usr/bin/python3
+"""Guard the existing Continuum staged checkout and pointer switch."""
+import argparse
+import contextlib
+import fcntl
+import hashlib
+import json
+import os
+from pathlib import Path, PurePosixPath
+import re
+import stat
+import subprocess
+import tarfile
+import tempfile
+
+ROOT = Path("/var/www/continuum")
+CHECKER = "/usr/local/libexec/harvj/release-integrity"
+LOCK = Path("/run/lock/continuum-activation.lock")
+
+
+def protected(path, owner=0):
+    meta = path.lstat()
+    if meta.st_uid != owner or meta.st_mode & 0o022 or stat.S_ISLNK(meta.st_mode):
+        raise ValueError(f"Unprotected release path: {path}")
+    return meta
+
+
+def sha256(stream):
+    digest = hashlib.sha256()
+    for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+        digest.update(chunk)
+    return digest.hexdigest()
+
+
+def check_archive(archive, release, expected_sha, expected_digest, *, owner=0):
+    if not stat.S_ISDIR(protected(release, owner).st_mode):
+        raise ValueError("Expected a staged release directory")
+    with archive.open("rb") as source, tempfile.TemporaryFile() as sealed:
+        for chunk in iter(lambda: source.read(1024 * 1024), b""):
+            sealed.write(chunk)
+        sealed.seek(0)
+        if sha256(sealed) != expected_digest:
+            raise ValueError("Continuum archive digest differs")
+        sealed.seek(0)
+        with tarfile.open(fileobj=sealed, mode="r:gz") as package:
+            if package.pax_headers.get("comment") != expected_sha:
+                raise ValueError("Continuum archive source differs")
+            seen = set()
+            for member in package:
+                relative = PurePosixPath(member.name)
+                if relative.is_absolute() or not relative.parts or ".." in relative.parts or relative in seen:
+                    raise ValueError("Invalid archive member")
+                seen.add(relative)
+                target = release / relative
+                for parent in target.parents:
+                    if parent == release:
+                        break
+                    if not stat.S_ISDIR(protected(parent, owner).st_mode):
+                        raise ValueError("Unexpected staged release parent")
+                metadata = protected(target, owner)
+                if member.isdir() and stat.S_ISDIR(metadata.st_mode):
+                    continue
+                if not member.isfile() or not stat.S_ISREG(metadata.st_mode):
+                    raise ValueError("Unexpected staged release member")
+                with target.open("rb") as installed, contextlib.closing(package.extractfile(member)) as archived:
+                    if metadata.st_size != member.size or sha256(installed) != sha256(archived):
+                        raise ValueError(f"Staged release differs at {relative}")
+            if PurePosixPath("VERSION") not in seen:
+                raise ValueError("Archive is missing VERSION")
+
+
+def run(*command):
+    return subprocess.check_output(command, text=True, timeout=850).strip()
+
+
+def verify_ancestry(source, checksum):
+    observed = json.loads(run(CHECKER, "harvj/continuum", source, checksum))
+    if (observed.get("result"), observed.get("source_sha"), observed.get("artifact_sha256")) != (
+        "pass", source, checksum
+    ):
+        raise ValueError("Continuum REL-01 result differs from the verified archive")
+    return observed
+
+
+def point(target):
+    with tempfile.TemporaryDirectory(prefix=".current-", dir=ROOT) as temporary:
+        link = Path(temporary) / "current"
+        link.symlink_to(target)
+        os.replace(link, ROOT / "current")
+
+
+def verify_running(release):
+    pid = run("systemctl", "show", "continuum.service", "-p", "MainPID", "--value")
+    if not pid.isdigit() or Path(f"/proc/{pid}/cwd").resolve(strict=True) != release:
+        raise ValueError("Continuum running release differs")
+    for endpoint in ("up", "ready"):
+        run("curl", "-fsS", "--max-time", "5", "--retry", "5", "--retry-all-errors",
+            "-H", "Host: network.harvj.com", f"http://127.0.0.1:4310/{endpoint}")
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("source")
+    parser.add_argument("digest")
+    parser.add_argument("archive", type=Path)
+    parser.add_argument("--check-only", action="store_true")
+    args = parser.parse_args()
+    if os.geteuid() or not re.fullmatch(r"[0-9a-f]{40}", args.source) or not re.fullmatch(r"[0-9a-f]{64}", args.digest):
+        parser.error("Root, exact source SHA and SHA-256 are required")
+    release = ROOT / "releases" / args.source
+    for parent in (ROOT, release.parent):
+        protected(parent)
+    os.umask(0o077)
+    with LOCK.open("a") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        check_archive(args.archive, release, args.source, args.digest)
+        receipt = verify_ancestry(args.source, args.digest)
+        if args.check_only:
+            print(json.dumps(receipt))
+            return
+        current = ROOT / "current"
+        if not current.is_symlink():
+            raise ValueError("Existing Continuum activation pointer required")
+        previous = current.resolve(strict=True)
+        if previous.parent != release.parent:
+            raise ValueError("Unexpected retained Continuum release")
+        archive = ROOT / "shared" / "rel01"
+        protected(archive.parent)
+        archive.mkdir(mode=0o700, exist_ok=True)
+        protected(archive)
+        with (archive / f"{args.source}.{args.digest}.preflight.json").open("x") as record:
+            json.dump(receipt, record)
+            record.flush()
+            os.fsync(record.fileno())
+        point(release)
+        try:
+            run("systemctl", "restart", "continuum.service")
+            verify_running(release)
+        except (OSError, ValueError, subprocess.SubprocessError):
+            point(previous)
+            run("systemctl", "restart", "continuum.service")
+            verify_running(previous)
+            raise
+        print(json.dumps({"result": "activated", **{k: receipt[k] for k in (
+            "source_sha", "artifact_sha256", "main_sha"
+        )}}))
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (OSError, ValueError, subprocess.SubprocessError) as error:
+        raise SystemExit(f"Continuum activation refused or recovered: {error}") from None
