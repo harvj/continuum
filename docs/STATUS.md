@@ -1,5 +1,126 @@
 # Continuum status
 
+## v0.3.0 Intelligence content
+
+Continuum v0.3.0 is deployed at `c9d6e87d7537cadf80bd147242ede5e001d97fe0`.
+The live Intelligence reader verified a protected Auth Content v1 response
+with no published main region. The publisher returned 304 for its ETag.
+Disposable Auth and Continuum tests cover publish, edit, rename,
+withdrawal, expiry, and safe rendering. Editor changes take effect on a
+successful refresh without a Continuum deployment.
+[Visual review](design/intelligence-content/README.md) · [GitHub release](https://github.com/harvj/continuum/releases/tag/v0.3.0).
+
+Continuum adopted reusable signed Shell v2.5.0. Later releases can select
+v2.5.0 when they meet its scoped conditions and supply exact evidence
+through the existing preflight. The global minimum remains v1.3.0.
+[Published policy receipt](https://github.com/harvj/infrastructure/pull/34#issuecomment-7180961854).
+
+## v0.2.1 navigation release
+
+Continuum v0.2.1 is deployed on Network, Library and Intelligence at
+`1181843635418eff0fc4f06a17097fdf5527e033`. The exact archive, hosted CI,
+signed Shell v2.4.0 preflight and public desktop/mobile browser checks
+passed. Production Auth configuration, active registry and database
+schema match v0.2.0. The v0.2.0 release remains available for rollback.
+See the [exact visual evidence](design/navigation/rc-1/README.md) and
+[published release](https://github.com/harvj/continuum/releases/tag/v0.2.1).
+
+## v0.2.0 unified Continuum sign-in
+
+Exact candidate `3de4a58d7de5d2090ba6a81ea5b6813454bb44b2`
+uses one Rails session and individual host-only handles. All three live
+White Sands entry and cross-host logout journeys passed on the exact
+guarded preview. The full signed Shell v2.3.0 preflight passed.
+The encrypted pre-migration backup and isolated v0.1.2 restore passed.
+Continuum v0.2.0 is active on all three public hosts. Public checks and
+neighbor comparisons passed. Production White Sands sign-in, direct
+sibling visits, and shared logout and Auth grant revocation passed.
+The [GitHub release](https://github.com/harvj/continuum/releases/tag/v0.2.0)
+and exact archive are published. P1.5 is complete for this release.
+P1.1 shared content and import is the next product milestone.
+See the [Auth qualification record](qualification/CONTINUUM_AUTH_ONBOARDING.md).
+
+## Confidential-client onboarding checkpoint before v0.2.0
+
+Signed Shell v2.1 and the Auth password-sufficient policy are live.
+Auth verified all three protected owner-only registrations and their
+credential handoffs, then deployed the canonical binding and requester
+mappings. The replacement passed password-only sign-in and provider
+revocation on all three hosts in the isolated preview, alongside local
+and hosted CI. An exact signed footer disposition is outstanding.
+Immediate cross-host sign-in on direct visits requires policy review.
+Public login routes remain inactive on v0.1.2. See the
+[onboarding record](qualification/CONTINUUM_AUTH_ONBOARDING.md).
+
+## v0.2.0 owner-assurance resolution
+
+Auth recorded a candidate-specific owner-assurance policy without changing
+the accepted code SHA. The protected signed Auth review still lacks
+mandatory observations. Infrastructure has an exact forward v2.1 manifest
+in review and needs the authorized publisher signature. Continuum stays
+on v0.1.2. See the
+[assurance and release gate record](qualification/CONTINUUM_V0.2.0_ASSURANCE.md).
+
+## v0.2.0 selected v2 qualification
+
+Reconciled the exact local release branch with remote operations guidance.
+The merged selector verified signed v2.0.0 while preserving the global
+v1.3.0 minimum, and Continuum can read the commissioned registry cache.
+The release remains blocked on independent Auth security review and
+signed v2 scopes for the approved anonymous entry and footer text.
+See the [v2 coordination record](qualification/CONTINUUM_V0.2.0_V2_COORDINATION.md).
+
+## SH-07 exact-artifact release identity
+
+The local candidate verifies signed launch bindings, numbered release
+candidates, independent acceptance and publication evidence, same-process
+footer transition, and rollback. Real Auth, production registry ownership,
+and trusted v2 preflight acceptance remain open. See the
+[SH-07 qualification record](qualification/CONTINUUM_SH07_RELEASE_IDENTITY.md).
+
+## v0.2.0 owner authorization and integration review
+
+The checksum-complete sealed candidate passed frozen bundle verification and
+local Rails, browser and registry checks. The signed production preflight
+still blocks activation pending independent Infrastructure and Auth review,
+signed policy publication, actual registrations and verifier installation.
+Production remains v0.1.2. See the [owner handoff](qualification/CONTINUUM_V0.2.0_OWNER_HANDOFF.md).
+
+## v0.2.0 production gate follow-up
+
+The local SH-09 lifecycle passed after fixing signed destination withdrawals.
+Production has no Continuum verifier cache installation yet. Auth confirmed
+that all three callback registrations and their requester mapping are still
+outstanding. Infrastructure's signed SH-02 and SH-06 decisions remain open.
+See the [registry qualification record](qualification/CONTINUUM_SH09_REGISTRY.md).
+
+## Continuum Auth integration candidate
+
+The local v0.2.0 candidate adds host-local OIDC sessions and a signed-registry
+consumer. Anonymous landing pages retain their three public navigation links.
+Local HTTPS browser and PostgreSQL tests passed. Signed preflight is blocked
+on scoped navigation and text decisions, real Auth registrations and journeys,
+and production registry refresh verification. See the
+[Auth production gate record](qualification/CONTINUUM_AUTH_PRODUCTION_GATES.md).
+
+## v0.2.0 release candidate
+
+The candidate adds a two-tone focus indicator to the Intelligence footer
+credit. Local browser and PostgreSQL tests passed. Signed v1.3.0 production
+preflight blocked the release on Auth, registry behavior and footer contrast.
+Infrastructure PR #20 is awaiting independent review. Production remains
+on v0.1.2. See the [release readiness record](qualification/CONTINUUM_V0.2.0_PREFLIGHT.md).
+
+## Application Shell v2.0.0 local qualification
+
+Verified signed v2 inputs and the current signed v1.3.0 baseline. The local
+candidate exercises the public header and footer on all three hosts and the
+approved Network appearance pair. Continuum has no Auth-backed session, so
+SH-05 is not applicable to its current public pages. Library and Intelligence
+have scoped v2 footer text approvals after separate credit measurements.
+Outline contrast and exact-artifact release receipts remain outstanding. See the [qualification record](qualification/APPLICATION_SHELL_V2.md)
+and [P1.5 roadmap](ROADMAP.md#p15--application-shell-readiness-and-auth-onboarding).
+
 ## v0.1.2 Site Art presentation
 
 Production runs `7c2d9cb797d0340b590ffa8439df607126bd18df`.

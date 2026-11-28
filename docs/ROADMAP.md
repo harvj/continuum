@@ -99,6 +99,28 @@ prepare reviewable configuration, validate isolated rollout, restore and rollbac
 then obtain explicit authorization for production service/DNS changes. Launch both
 hosts only after content, media, navigation and backup acceptance.
 
+## P1.5 — Application Shell readiness and Auth onboarding
+
+**Complete for Continuum v0.2.0.** Network, Library and Intelligence
+remain publicly accessible. A deliberate White Sands sign-in through
+any one host establishes one shared Continuum session with three
+host-only browser handles. A single logout clears the session and
+revokes the grant through its originating Auth client.
+
+The Continuum-specific signed Shell v2.3.0 dispositions cover the
+unified entry and exact Library and Intelligence footer evidence.
+The global mandatory baseline remains v1.3.0. Live preview and
+production verification passed, including the verified registry,
+keyboard focus and rollback rehearsal. SH-07 receipt promotion passed
+in isolation. Live receipt custody is future operations work and the
+deployed release uses the packaged version footer.
+
+See the [qualification record](qualification/CONTINUUM_AUTH_ONBOARDING.md)
+and [published release](https://github.com/harvj/continuum/releases/tag/v0.2.0).
+P1.1 is the next product milestone. The original Intelligence tableau,
+searchable Library and Network experience remain in their numbered
+milestones.
+
 ## P2.0 — Medium/Substack migration and conversation extraction
 
 **Provisional.** Inventory actual exports, preserve source evidence and publication

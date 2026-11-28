@@ -18,6 +18,19 @@ the CE project. Record it as a baseline observation during v0.1.0 activation.
 Keep CE trading controls, budgets, databases, and authorizations outside
 deployment scope.
 
+For each normal production release, run Application Shell preflight on the
+operator workstation before any production-side changes. Use the full Git SHA
+of the selected archive and the ordinary test and browser review for that SHA.
+Use the shared command from a reviewed Infrastructure checkout.
+
+```sh
+application-shell-preflight --app continuum --revision "$candidate_sha" --review "$review_file"
+```
+
+Stop on a nonzero result. Resolve the reported checks in Continuum, rerun
+the review for the new SHA and repeat preflight before continuing. Existing
+rollback and emergency procedures remain available under their own runbook.
+
 1. Create the dedicated `continuum` system user/group, a PostgreSQL LOGIN role
    `continuum` with no superuser/role/database creation privileges, and a new
    database `continuum_production` owned by that role. Use a private PostgreSQL
@@ -61,7 +74,15 @@ separately. Site Art backs up its own publication tree.
 
 For application rollback, switch `current` to the prior verified release,
 restart only `continuum.service`, and recheck both probes and all three hosts.
-This release has no application migrations. For first-release withdrawal,
+For v0.2.0, rehearse the additive authentication migration against a
+disposable database before authorization. Apply it to Continuum's database
+under the approved migration procedure before enabling Auth registrations.
+Retain the tables on application rollback to v0.1.2. Coordinate with Auth
+before rollback to withdraw or repoint any entry that would target a
+route absent from the restored release. The verifier keeps its durable
+registry trust and cache state across application rollback.
+
+For first-release withdrawal,
 the infrastructure operator removes only Continuum's registration using
 the shared lock and validation process, then stops the Continuum unit.
 Preserve its database, media, release history and other routes. Artwork

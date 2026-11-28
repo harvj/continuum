@@ -67,3 +67,14 @@ After one-time commissioning, a validated push to `harvj/site-art/main`
 authorizes publication. Publication and rollback need no Continuum restart,
 configuration change or redeployment. Continuum has no publication credentials.
 See [release readiness](RELEASE_v0.1.1.md) for current commissioning status.
+
+## Network day and night artwork
+
+Site Art publishes the approved Network pair as
+`continuum.network_background_light` and
+`continuum.network_background_dark`. Continuum uses the variants and their
+separate treatments from the same verified snapshot. A complete pair enables
+the Network appearance control. The anonymous page follows the system setting
+until a visitor chooses a mode. A single remaining variant can render on its
+own when the original Network ID is absent, and it leaves any saved preference
+intact. Library and Intelligence use their single approved backgrounds.

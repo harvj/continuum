@@ -47,6 +47,23 @@ synthetic fixtures in both repositories before registering any artwork.
 - Keep Continuum Engine trading controls, budgets, databases, and
   authorizations outside Continuum deployment scope.
 
+### Application Shell qualification
+
+- Keep Shell v2 evidence in [docs/qualification](docs/qualification).
+  Production preflight uses the signed mandatory minimum and the deployment
+  owner's approved exact version selection. An application-specific v2
+  adoption leaves the global v1.3.0 minimum in place.
+- Use the exact reviewed Infrastructure approval revision recorded in the
+  [v2 qualification](docs/qualification/APPLICATION_SHELL_V2.md). Only the
+  listed Library and Intelligence footer text and credit crops are eligible.
+  Test the credit target, accessible name, keyboard reachability, wrapping,
+  and visible focus independently.
+- Record measured ratios and keep `pass`, `approved_exception`, and
+  `unresolved` distinct. Refer below-target cases outside the approval to
+  review. Requalify material artwork, crop, foreground, typography, markup,
+  or accessibility changes. Keep qualification approval IDs out of signed
+  fixtures and production preflight records.
+
 ## Simple Operations
 
 Follow [Infrastructure Simple Operations v1.1](https://github.com/harvj/infrastructure/blob/main/docs/standards/simple-operations-v1.md). Use one dedicated non-root Unix account per application for deploy and runtime, with independent files, processes, writable directories, and PostgreSQL databases and roles. Restrict SSH and administrative access. Use one established deployment path (Capistrano for existing Rails apps) and one exact-release approval. Keep trusted CI, exact-artifact verification, reviewed migrations, verified backups and restore, health checks, and compatible application-only rollback. Prefer removing or consolidating controls. Explain the concrete need, existing alternatives, replacement, and upkeep before adding complexity. Obtain explicit operator approval for exceptions and new privileged machinery, required gates, persistent services, or authorization systems. Existing approved paths remain usable until individually migrated.
