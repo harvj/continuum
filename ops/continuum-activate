@@ -128,7 +128,10 @@ def main():
         protected(archive.parent)
         archive.mkdir(mode=0o700, exist_ok=True)
         protected(archive)
-        with (archive / f"{args.source}.{args.digest}.preflight.json").open("x") as record:
+        with tempfile.NamedTemporaryFile(
+            mode="w", prefix=f"{args.source}.{args.digest}.", suffix=".preflight.json",
+            dir=archive, delete=False,
+        ) as record:
             json.dump(receipt, record)
             record.flush()
             os.fsync(record.fileno())
@@ -141,7 +144,7 @@ def main():
             run("systemctl", "restart", "continuum.service")
             verify_running(previous)
             raise
-        print(json.dumps({"result": "activated", **{k: receipt[k] for k in (
+        print(json.dumps({"result": "activated", "receipt": record.name, **{k: receipt[k] for k in (
             "source_sha", "artifact_sha256", "main_sha"
         )}}))
 

@@ -90,8 +90,8 @@ rollback is a separate Site Art operation.
 
 ## Guarded activation of a staged release
 
-After the existing signed Shell preflight, review, backup or migration steps
-where applicable, and release-local setup, the operator uses the installed
+After the existing signed Shell preflight, review, and release-local setup,
+the operator uses the installed
 activation command for the same reviewed Git archive and protected staged
 tree. It performs REL-01 itself and switches the existing pointer only on a
 passing result. It retains the protected preflight receipt under
@@ -103,3 +103,5 @@ sudo /usr/local/sbin/continuum-activate "$candidate_sha" "$archive_sha256" "$arc
 
 Use `--check-only` to verify a staged archive and tree without changing
 the pointer, restarting the service, or creating a promotion receipt.
+For a release requiring an existing separately controlled migration, run this
+check before the migration and retain the normal migration and backup checks.
